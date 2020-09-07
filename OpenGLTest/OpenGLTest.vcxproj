@@ -129,7 +129,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Face.cpp" />
+    <ClCompile Include="Group.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManageObj.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Obj3D.cpp" />
+    <ClCompile Include="Screensaver.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="StructureTest.cpp" />
+    <ClCompile Include="System.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Face.h" />
+    <ClInclude Include="ManageObj.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="Obj3D.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="StructureTest.h" />
+    <ClInclude Include="System.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Core\core.frag" />
+    <None Include="Shaders\Core\core.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
