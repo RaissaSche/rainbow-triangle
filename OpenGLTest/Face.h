@@ -7,10 +7,10 @@ class Face
 {
 public:
 	int numVertices;
-	vector<int> verts, norms, texts;
+	std::vector<int> verts, norms, texts;
 
-	Face(vector<int> verts, int numVertices);
-	Face(vector<int> verts, vector<int> norms, int numVertices);
-	Face(vector<int> verts, vector<int> texts, int numVertices);
-	Face(vector<int> verts, vector<int> norms, vector<int> texts, int numVertices);
+	Face(std::vector<int> verts, int numVertices);
+	Face(std::vector<int> verts, std::vector<int> norms, int numVertices);
+	Face(std::vector<int> verts, std::vector<int> texts, int numVertices);
+	Face(std::vector<int> verts, std::vector<int> norms, std::vector<int> texts, int numVertices);
 };
