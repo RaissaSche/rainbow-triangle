@@ -12,7 +12,6 @@ class Mesh
 public:
 	string mtllib;
 	glm::vec3 min, max;
-	unsigned int VAO, VBO;
 
 	vector<glm::vec3*> vertex;
 	vector<glm::vec3*> norms;

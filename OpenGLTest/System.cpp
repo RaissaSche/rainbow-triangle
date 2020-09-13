@@ -1,5 +1,7 @@
 #include "System.h"
+#include "ManageObj.h"
 #include "Obj3D.h"
+#include "StructureTest.h"
 
 
 System::System()
@@ -76,6 +78,7 @@ void System::Run()
 {
 
 	coreShader.Use();
+
 	//coreShader.LoadTexture("images/woodTexture.jpg", "texture1", "woodTexture");
 
 	GLfloat vertices[] =
@@ -91,7 +94,7 @@ void System::Run()
 		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top Right
 	};
 
-	GLuint VBO, VAO;
+	/*GLuint VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -104,10 +107,25 @@ void System::Run()
 	// Position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
+	*/
+
+	GLuint VAO;
+	ManageObj* manageObj = new ManageObj();
+	StructureTest* structureTest = new StructureTest();
+	Obj3D* obj3D = structureTest->HardcodedCube();
+	manageObj->ObjToVBO(obj3D);
+	VAO = obj3D->GetMesh()->groups[0]->VAO;
+	//glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+
+	/*glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
 
 	// Texture attribute
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
+	*/
 
 	glBindVertexArray(0); // Unbind VAO
 
@@ -131,13 +149,12 @@ void System::Run()
 		//coreShader.UseTexture("woodTexture");
 
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 
 
 		glfwSwapBuffers(window);
 	}
-
 
 }
 

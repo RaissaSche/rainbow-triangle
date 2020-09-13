@@ -14,7 +14,7 @@ public:
 	string name;
 	string material;
 	vector<Face*> faces;
-	unsigned int VAO, VBO;
+	unsigned int VAO;
 
 	Group(string name, string material, vector<Face*> faces);
 };

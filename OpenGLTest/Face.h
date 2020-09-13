@@ -4,13 +4,16 @@
 #include <vector>
 
 class Face
+	//get number of vectors from array size
 {
-public:
-	int numVertices;
+private:
 	std::vector<int> verts, norms, texts;
 
-	Face(std::vector<int> verts, int numVertices);
-	Face(std::vector<int> verts, std::vector<int> norms, int numVertices);
-	Face(std::vector<int> verts, std::vector<int> texts, int numVertices);
-	Face(std::vector<int> verts, std::vector<int> norms, std::vector<int> texts, int numVertices);
+public:
+	//when empty, pass -1 value - maybe will need/be better to receive pointers
+	void addInfo(int vp, int vt, int vn);
+	int getNumOfVertices();
+	std::vector<int> getVerts();
+	std::vector<int> getNorms();
+	std::vector<int> getTexts();
 };

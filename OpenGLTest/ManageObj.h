@@ -10,4 +10,3 @@ public:
 	void ObjToVBO(Obj3D* obj3D);
 
 };
-

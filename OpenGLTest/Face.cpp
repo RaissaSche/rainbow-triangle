@@ -1,26 +1,33 @@
 #include "Face.h"
 
 
-Face::Face(std::vector<int> verts, int numVertices) {
-	this->verts = verts;
-	this->numVertices = numVertices;
+void Face::addInfo(int vp, int vt, int vn)
+{
+	verts.push_back(vp);
+	if (vt != -1) {
+		texts.push_back(vt);
+	}
+	if (vn != -1) {
+		norms.push_back(vn);
+	}
 }
 
-Face::Face(std::vector<int> verts, std::vector<int> norms, int numVertices) {
-	this->verts = verts;
-	this->norms = norms;
-	this->numVertices = numVertices;
+int Face::getNumOfVertices()
+{
+	return verts.size();
 }
 
-Face::Face(std::vector<int> verts, std::vector<int> texts, int numVertices) {
-	this->verts = verts;
-	this->texts = texts;
-	this->numVertices = numVertices;
+std::vector<int> Face::getVerts()
+{
+	return verts;
 }
 
-Face::Face(std::vector<int> verts, std::vector<int> norms, std::vector<int> texts, int numVertices) {
-	this->verts = verts;
-	this->norms = norms;
-	this->texts = texts;
-	this->numVertices = numVertices;
+std::vector<int> Face::getNorms()
+{
+	return norms;
+}
+
+std::vector<int> Face::getTexts()
+{
+	return texts;
 }
