@@ -5,30 +5,30 @@ void ManageObj::ObjToVBO(Obj3D* obj3D) {
 
 	Mesh* mesh = obj3D->GetMesh();
 
-	for (int i = 0; i < mesh->groups.size(); i++)
+	for (int i = 0; i < mesh->getGroups().size(); i++)
 	{
-		Group* g = mesh->groups[i];
+		Group* g = mesh->getGroups()[i];
 		vector<float> vs;
 		vector<float> vts;
 		vector<float> vns;
 
-		for (Face* f : g->faces) {
+		for (Face* f : g->getFaces()) {
 			for (int i = 0; i < 3; i++) { //get the "3" from face's number of vertices
 				//vertex
-				glm::vec3* v = mesh->vertex[f->getVerts()[i]];
+				glm::vec3* v = mesh->getVertex()[f->getVerts()[i]];
 				vs.push_back(v->x);
 				vs.push_back(v->y);
 				vs.push_back(v->z);
 				//norms
 				if (!f->getNorms().empty()) {
-					glm::vec3* vn = mesh->norms[f->getNorms()[i]];
+					glm::vec3* vn = mesh->getNorms()[f->getNorms()[i]];
 					vns.push_back(vn->x);
 					vns.push_back(vn->y);
 					vns.push_back(vn->z);
 				}
 				//texts
 				if (!f->getTexts().empty()) {
-					glm::vec2* vt = mesh->texts[f->getTexts()[i]];
+					glm::vec2* vt = mesh->getTexts()[f->getTexts()[i]];
 					vts.push_back(v->x);
 					vts.push_back(v->y);
 				}
@@ -64,6 +64,6 @@ void ManageObj::ObjToVBO(Obj3D* obj3D) {
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
-		g->VAO = VAO;
+		g->setVAO(VAO);
 	}
 }

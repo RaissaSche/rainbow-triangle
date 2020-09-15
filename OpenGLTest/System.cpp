@@ -60,7 +60,7 @@ int System::OpenGLSetup()
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 
 	return EXIT_SUCCESS;
 }
@@ -78,54 +78,42 @@ void System::Run()
 {
 
 	coreShader.Use();
-
 	//coreShader.LoadTexture("images/woodTexture.jpg", "texture1", "woodTexture");
 
-	GLfloat vertices[] =
-	{
-		// Positions         // Textures
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	
+	//eye
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+	//direction
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 cameraDirection = glm::normalize(cameraTarget - cameraPos);
+	//right
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+	//up
+	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+	
+	//view
+	glm::mat4 view;
+	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top Right
-		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Bottom Right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom Left
+	//proj
+	glm::mat4 proj = glm::mat4(1.0f);
+	proj = glm::perspective(66.0f/180.f * 3.1416f, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom Left
-		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f, // Top Left
-		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top Right
-	};
 
-	/*GLuint VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	*/
 
 	GLuint VAO;
 	ManageObj* manageObj = new ManageObj();
 	StructureTest* structureTest = new StructureTest();
-	Obj3D* obj3D = structureTest->HardcodedCube();
-	manageObj->ObjToVBO(obj3D);
-	VAO = obj3D->GetMesh()->groups[0]->VAO;
-	//glGenVertexArrays(1, &VAO);
+	vector<Obj3D*> objs3D;
+	Obj3D* hardcodedCube = structureTest->HardcodedCube();
+	objs3D.push_back(hardcodedCube);
+	manageObj->ObjToVBO(objs3D[0]);
+	VAO = objs3D[0]->GetMesh()->getGroups()[0]->getVAO();
 
 	glBindVertexArray(VAO);
 
-	/*glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	// Texture attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	*/
 
 	glBindVertexArray(0); // Unbind VAO
 
@@ -135,8 +123,23 @@ void System::Run()
 
 #pragma region Input Handling
 
+		const float cameraSpeed = 0.05f; // adjust accordingly
+
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+			cameraPos += cameraSpeed * cameraFront;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+			cameraPos -= cameraSpeed * cameraFront;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+			cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+			cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 		}
 
 #pragma endregion
@@ -148,14 +151,19 @@ void System::Run()
 
 		//coreShader.UseTexture("woodTexture");
 
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-
-
+		for (Obj3D* obj : objs3D) {
+			Mesh* mesh = obj->GetMesh();
+			int loc = glGetUniformLocation(coreShader.program, "model");
+			glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(obj->getTransform()));
+			for (Group* g : mesh->getGroups()) {
+				glBindVertexArray(g->getVAO());
+				//Material *material = getMaterial(g->material);
+				//glBindTexture(GL_TEXTURE_2D, material->tid);
+				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices(3));
+			}
+		}
 		glfwSwapBuffers(window);
 	}
-
 }
 
 void System::Finish()

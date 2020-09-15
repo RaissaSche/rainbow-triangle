@@ -14,6 +14,7 @@ class Obj3D
 
 public:
 
-	Obj3D(Mesh* mesh, glm::mat4 transform, int status, bool disposable, glm::vec3 direction);
+	void addInfo(Mesh* mesh, glm::mat4 transform, int status, bool disposable, glm::vec3 direction);
 	Mesh* GetMesh();
+	glm::mat4 getTransform();
 };

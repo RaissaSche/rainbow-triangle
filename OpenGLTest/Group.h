@@ -10,11 +10,15 @@ using namespace std;
 
 class Group
 {
-public:
 	string name;
 	string material;
 	vector<Face*> faces;
 	unsigned int VAO;
 
+public:
 	Group(string name, string material, vector<Face*> faces);
+	unsigned int getVAO();
+	void setVAO(unsigned int VAO);
+	int getNumOfvertices(int vertexesPerFace);
+	vector<Face*> getFaces();
 };
