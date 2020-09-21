@@ -79,7 +79,8 @@ Obj3D* StructureTest::HardcodedCube()
 	faces.push_back(face10);
 	faces.push_back(face11);
 
-	Group* group = new Group("group", "material", faces);
+	Group* group = new Group();
+	group->initializeGroup("group", "material", faces);
 
 	//Mesh
 	glm::vec3* zero = new glm::vec3(-0.5f, -0.5f, 0.5f); //0

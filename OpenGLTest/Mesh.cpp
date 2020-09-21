@@ -13,9 +13,19 @@ void Mesh::addInfo(string mtllib, glm::vec3 min, glm::vec3 max, vector<glm::vec3
 	this->groups = groups;
 }
 
+void Mesh::addVert(glm::vec3* vert)
+{
+	this->vertex.push_back(vert);
+}
+
 vector<glm::vec3*> Mesh::getVertex()
 {
 	return vertex;
+}
+
+void Mesh::addNorm(glm::vec3* norm)
+{
+	this->norms.push_back(norm);
 }
 
 vector<glm::vec3*> Mesh::getNorms()
@@ -23,9 +33,19 @@ vector<glm::vec3*> Mesh::getNorms()
 	return norms;
 }
 
+void Mesh::addText(glm::vec2* text)
+{
+	this->texts.push_back(text);
+}
+
 vector<glm::vec2*> Mesh::getTexts()
 {
 	return texts;
+}
+
+void Mesh::addGroup(Group* group)
+{
+	this->groups.push_back(group);
 }
 
 vector<Group*> Mesh::getGroups()

@@ -14,7 +14,12 @@ void Face::addInfo(int vp, int vt, int vn)
 
 int Face::getNumOfVertices()
 {
-	return verts.size();
+	return numOfVertices;
+}
+
+void Face::setNumOfVertices(int numOfVertices)
+{
+	this->numOfVertices = numOfVertices;
 }
 
 std::vector<int> Face::getVerts()

@@ -80,7 +80,7 @@ void System::Run()
 	coreShader.Use();
 	//coreShader.LoadTexture("images/woodTexture.jpg", "texture1", "woodTexture");
 
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	/*glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	
 	//eye
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -101,21 +101,33 @@ void System::Run()
 	glm::mat4 proj = glm::mat4(1.0f);
 	proj = glm::perspective(66.0f/180.f * 3.1416f, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
-
+	float yaw = -90.0f;
+	float pitch = 0.0f;
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(yaw));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));*/
 
 	GLuint VAO;
 	ManageObj* manageObj = new ManageObj();
-	StructureTest* structureTest = new StructureTest();
 	vector<Obj3D*> objs3D;
-	Obj3D* hardcodedCube = structureTest->HardcodedCube();
-	objs3D.push_back(hardcodedCube);
+	Obj3D* obj3D = manageObj->readObj("mesa01.obj");
+	objs3D.push_back(obj3D);
 	manageObj->ObjToVBO(objs3D[0]);
-	VAO = objs3D[0]->GetMesh()->getGroups()[0]->getVAO();
+	VAO = objs3D[0]->getMesh()->getGroups()[0]->getVAO();
+	//the table has a big scale, can't see it without scaling it down!
+
+	//----- Hardcoded Cube -------
+	//StructureTest* structureTest = new StructureTest();
+	//Obj3D* hardcodedCube = structureTest->HardcodedCube();
+	//objs3D.push_back(hardcodedCube);
+	//manageObj->ObjToVBO(objs3D[0]);
+	//VAO = objs3D[0]->getMesh()->getGroups()[0]->getVAO();
 
 	glBindVertexArray(VAO);
 
-
 	glBindVertexArray(0); // Unbind VAO
+
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -129,17 +141,22 @@ void System::Run()
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-			cameraPos += cameraSpeed * cameraFront;
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+			//cameraPos += cameraSpeed * cameraFront;
+			//refazer a view!
+			//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-			cameraPos -= cameraSpeed * cameraFront;
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+			//cameraPos -= cameraSpeed * cameraFront;
+			//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-			cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+			//cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+			//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-			cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+			//cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+			//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		}
 
 #pragma endregion
@@ -151,14 +168,23 @@ void System::Run()
 
 		//coreShader.UseTexture("woodTexture");
 
+		//int viewU = glGetUniformLocation(coreShader.program, "view");
+		//glUniformMatrix4fv(viewU, 1, GL_FALSE, glm::value_ptr(view));
+		//int projU = glGetUniformLocation(coreShader.program, "proj");
+		//glUniformMatrix4fv(projU, 1, GL_FALSE, glm::value_ptr(proj));
+
 		for (Obj3D* obj : objs3D) {
-			Mesh* mesh = obj->GetMesh();
-			int loc = glGetUniformLocation(coreShader.program, "model");
-			glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(obj->getTransform()));
+			Mesh* mesh = obj->getMesh();
+
+			//int loc = glGetUniformLocation(coreShader.program, "model");
+			//glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(obj->getTransform()));
+
 			for (Group* g : mesh->getGroups()) {
 				glBindVertexArray(g->getVAO());
 				//Material *material = getMaterial(g->material);
 				//glBindTexture(GL_TEXTURE_2D, material->tid);
+
+				//fix this!
 				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices(3));
 			}
 		}

@@ -7,6 +7,6 @@
 class ManageObj
 {
 public:
+	Obj3D* readObj(string fileName);
 	void ObjToVBO(Obj3D* obj3D);
-
 };
