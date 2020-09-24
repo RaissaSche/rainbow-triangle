@@ -1,7 +1,7 @@
 #include "Mesh.h"
 
 
-void Mesh::addInfo(string mtllib, glm::vec3 min, glm::vec3 max, vector<glm::vec3*> vertex, 
+void Mesh::addInfo(string mtllib, glm::vec3* min, glm::vec3* max, vector<glm::vec3*> vertex, 
 	vector<glm::vec3*> norms, vector<glm::vec2*> texts, vector<Group*> groups ) {
 
 	this->mtllib = mtllib;
@@ -51,4 +51,14 @@ void Mesh::addGroup(Group* group)
 vector<Group*> Mesh::getGroups()
 {
 	return groups;
+}
+
+void Mesh::setMin(glm::vec3* min)
+{
+	this->min = min;
+}
+
+void Mesh::setMax(glm::vec3* max)
+{
+	this->max = max;
 }

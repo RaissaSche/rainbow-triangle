@@ -11,7 +11,8 @@ class Mesh
 {
 private:
 	string mtllib;
-	glm::vec3 min, max;
+	glm::vec3* min;
+	glm::vec3* max;
 
 	vector<glm::vec3*> vertex;
 	vector<glm::vec3*> norms;
@@ -19,7 +20,7 @@ private:
 	vector<Group*> groups;
 
 public:
-	void addInfo(string mtllib, glm::vec3 min, glm::vec3 max, vector<glm::vec3*> vertex,
+	void addInfo(string mtllib, glm::vec3* min, glm::vec3* max, vector<glm::vec3*> vertex,
 		vector<glm::vec3*> norms, vector<glm::vec2*> texts, vector<Group*> groups);
 	void addVert(glm::vec3* vert);
 	vector<glm::vec3*> getVertex();
@@ -29,4 +30,6 @@ public:
 	vector<glm::vec2*> getTexts();
 	void addGroup(Group* group);
 	vector<Group*> getGroups();
+	void setMin(glm::vec3* min);
+	void setMax(glm::vec3* max);
 };

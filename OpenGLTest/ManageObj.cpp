@@ -2,7 +2,6 @@
 #include "Group.h"
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
 
 Obj3D* ManageObj::readObj(string fileName)
@@ -11,6 +10,8 @@ Obj3D* ManageObj::readObj(string fileName)
 	Group* g_atual = new Group();
 	ifstream arq(fileName);
 	bool firstGroup = true;
+	glm::vec3* min = new glm::vec3(10000000.0f, 10000000.0f, 10000000.0f);
+	glm::vec3* max = new glm::vec3(-10000000.0f, -10000000.0f, -10000000.0f);
 
 	while (!arq.eof()) {
 		string line;
@@ -20,36 +21,28 @@ Obj3D* ManageObj::readObj(string fileName)
 		string temp;
 		sline >> temp;
 
-		//cout << line << '\n';
-
 		if (temp == "v") {
 			float x, y, z;
 			sline >> x >> y >> z;
-			//cout << x << ' ' << y << ' ' << z << ' ' << '\n';
 			glm::vec3* vert = new glm::vec3(x, y, z);
 			mesh->addVert(vert);
 		}
 		else if (temp == "vt") {
 			float x, y;
 			sline >> x >> y;
-			//cout << x << ' ' << y << '\n';
 			glm::vec2* text = new glm::vec2(x, y);
 			mesh->addText(text);
 		}
 		else if (temp == "vn") {
 			float x, y, z;
 			sline >> x >> y >> z;
-			//cout << x << ' ' << y << ' ' << z << ' ' << '\n';
 			glm::vec3* norm = new glm::vec3(x, y, z);
 			mesh->addNorm(norm);
 		}
 		else if (temp == "f") {
-			cout << line << '\n';
 			Face* f = new Face();
 			string token;
-			while (sline >> token) { //v/t/n, por exemplo
-				cout << token << '\n';
-
+			while (sline >> token) {
 				stringstream stoken;
 				string aux;
 				stoken << token;
@@ -58,25 +51,46 @@ Obj3D* ManageObj::readObj(string fileName)
 				int v = -1;
 				int t = -1;
 				int n = -1;
+				int x, y, z;
 
 				while (getline(stoken, aux, '/')) {
-					cout << aux << '\n';
 					// v, v/t/n, v/t e v//n
 					switch (it) {
-					case 0: v = stoi(aux) - 1;
+					case 0: 
+						x = stoi(aux);
+						v = x - 1;
+						if (x > max->x) {
+							max->x = x;
+						}
+						else if (x < min->x) {
+							min->x = x;
+						}
 						break;
 					case 1:
+						y = stoi(aux);
 						if (!aux.empty()) { 
-							t = stoi(aux) -1;
+							t = y - 1;
+							if (y > max->y) {
+								max->y = y;
+							}
+							else if (y < min->y) {
+								min->y = y;
+							}
 						}
 						break;
 					case 2: 
-						n = stoi(aux) -1;
+						z = stoi(aux);
+						n = z - 1;
+						if (z > max->z) {
+							max->z = z;
+						}
+						else if (z < min->z) {
+							min->z = z;
+						}
 						break;
 					}
 					it++;
 				}
-				cout << v << '+' << t << '+' << n << '\n';
 				f->addInfo(v, t, n);
 			}
 			g_atual->addFace(f);
@@ -85,7 +99,6 @@ Obj3D* ManageObj::readObj(string fileName)
 			string token;
 			sline >> token;
 			if (firstGroup){
-				//pode ter nada e l� no meio decretar o segundo grupo?
 				g_atual->setName(token);
 				firstGroup = false;
 			}
@@ -108,6 +121,8 @@ Obj3D* ManageObj::readObj(string fileName)
 		}*/	
 	}
 	mesh->addGroup(g_atual);
+	mesh->setMax(max);
+	mesh->setMin(min);
 	Obj3D* obj3D = new Obj3D();
 	obj3D->addInfo(mesh, glm::mat4(1.0), 1, false, glm::vec3(0.0f, 0.0f, 0.0f));
 	return obj3D;

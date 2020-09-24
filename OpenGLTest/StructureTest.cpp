@@ -132,7 +132,9 @@ Obj3D* StructureTest::HardcodedCube()
 	groups.push_back(group);
 
 	Mesh* mesh = new Mesh();
-	mesh->addInfo("mtllib", glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), vertex, norms, texts, groups);
+	glm::vec3* min = new glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3* max = new glm::vec3(1.0f, 1.0f, 1.0f);
+	mesh->addInfo("mtllib", min, max, vertex, norms, texts, groups);
 
 	//Obj3D
 	Obj3D* obj3D = new Obj3D();
