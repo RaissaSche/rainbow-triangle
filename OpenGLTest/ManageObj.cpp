@@ -114,17 +114,12 @@ Obj3D* ManageObj::readObj(string fileName)
 
 			g_atual->setMaterial(token);
 		}
-
-		/*else { //else-if
-			//verificar outras possibilidades:
-			//g, vn, ...
-		}*/	
 	}
 	mesh->addGroup(g_atual);
 	mesh->setMax(max);
 	mesh->setMin(min);
 	Obj3D* obj3D = new Obj3D();
-	obj3D->addInfo(mesh, glm::mat4(1.0), 1, false, glm::vec3(0.0f, 0.0f, 0.0f));
+	obj3D->addInfo(mesh, glm::mat4(1.0), 1, false, glm::vec3(0.0f, 0.0f, 0.0f), fileName, 0);
 	return obj3D;
 }
 

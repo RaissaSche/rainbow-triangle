@@ -22,14 +22,17 @@
 // Headers
 #include "Shader.h"
 #include "Time.h"
+#include "Obj3D.h"
 
 class System
 {
 private:
 	// Screen
-	const GLint WIDTH = 600, HEIGHT = 600;
-	int screenWidth, screenHeight;
-
+	int width, height;
+	vector<Obj3D*> objs;
+	glm::vec3 cameraPos;
+	glm::vec3 cameraTarget;
+	glm::vec3 cameraUp;
 public:
 	GLFWwindow* window;
 	Shader coreShader;

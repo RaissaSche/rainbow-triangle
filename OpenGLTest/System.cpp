@@ -1,7 +1,7 @@
 #include "System.h"
 #include "ManageObj.h"
 #include "Obj3D.h"
-#include "StructureTest.h"
+#include "ConfigureScene.h"
 
 
 System::System()
@@ -24,9 +24,16 @@ int System::GLFWInit()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	window = glfwCreateWindow(WIDTH, HEIGHT, "GA - Raissa Scheeren", nullptr, nullptr);
+	ConfigureScene* configureScene = new ConfigureScene();
+	configureScene->readFile("config.txt");
+	width = configureScene->getWidth();
+	height = configureScene->getHeight();
+	cameraPos = configureScene->getCameraPos();
+	cameraTarget = configureScene->getCameraTarget();
+	cameraUp = configureScene->getCameraUp();
+	objs = configureScene->getObjs();
 
-	glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+	window = glfwCreateWindow(width, height, "GA - Raissa Scheeren", nullptr, nullptr);
 
 	if (window == nullptr) {
 		std::cout << "Failed to create GLFW Window" << std::endl;
@@ -44,7 +51,7 @@ int System::GLFWInit()
 		return EXIT_FAILURE;
 	}
 
-	glViewport(0, 0, screenWidth, screenHeight);
+	glViewport(0, 0, width, height);
 
 	return EXIT_SUCCESS;
 
@@ -80,43 +87,23 @@ void System::Run()
 	coreShader.Use();
 	//coreShader.LoadTexture("images/woodTexture.jpg", "texture1", "woodTexture");
 
-	
-	//eye
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	//direction
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 cameraDirection = glm::normalize(cameraTarget - cameraPos);
-	//up
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	//right
-	glm::vec3 cameraRight = glm::normalize(glm::cross(cameraUp, cameraDirection));
-	
 	//view
 	glm::mat4 view;
 	view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
-	
+
 	//proj
 	glm::mat4 proj = glm::mat4(1.0f);
-	proj = glm::perspective(60.0f/180.f * 3.1416f, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+	proj = glm::perspective(60.0f / 180.f * 3.1416f, (float)width / (float)height, 0.1f, 100.0f);
 
 	GLuint VAO;
 	ManageObj* manageObj = new ManageObj();
-	vector<Obj3D*> objs3D;
-	Obj3D* obj3D = manageObj->readObj("mesa01.obj");
-	objs3D.push_back(obj3D);
-	manageObj->ObjToVBO(objs3D[0]);
-	VAO = objs3D[0]->getMesh()->getGroups()[0]->getVAO();
-	
-	//----- Hardcoded Cube -------
-	//StructureTest* structureTest = new StructureTest();
-	//Obj3D* hardcodedCube = structureTest->HardcodedCube();
-	//objs3D.push_back(hardcodedCube);
-	//manageObj->ObjToVBO(objs3D[0]);
-	//VAO = objs3D[0]->getMesh()->getGroups()[0]->getVAO();
+	for (int i = 0; i < objs.size(); i++){
+	manageObj->ObjToVBO(objs[i]);
+	VAO = objs[i]->getMesh()->getGroups()[i]->getVAO();
 
 	glBindVertexArray(VAO);
-
 	glBindVertexArray(0); // Unbind VAO
+	}
 
 
 	while (!glfwWindowShouldClose(window)) {
@@ -130,7 +117,6 @@ void System::Run()
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
-
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraUp;
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
@@ -161,8 +147,8 @@ void System::Run()
 		glUniformMatrix4fv(viewU, 1, GL_FALSE, glm::value_ptr(view));
 		int projU = glGetUniformLocation(coreShader.program, "proj");
 		glUniformMatrix4fv(projU, 1, GL_FALSE, glm::value_ptr(proj));
-
-		for (Obj3D* obj : objs3D) {
+	
+		for (Obj3D* obj : objs) {
 			Mesh* mesh = obj->getMesh();
 
 			int loc = glGetUniformLocation(coreShader.program, "model");
