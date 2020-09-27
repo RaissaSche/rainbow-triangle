@@ -1,5 +1,0 @@
-﻿  main.cpp
-C:\Users\Raissa\source\repos\OpenGL Basics\OpenGLTest\OpenGLTest\main.cpp(172,43): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
-C:\Users\Raissa\source\repos\OpenGL Basics\OpenGLTest\OpenGLTest\main.cpp(173,43): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
-C:\Users\Raissa\source\repos\OpenGL Basics\OpenGLTest\OpenGLTest\main.cpp(128,20): warning C4101: 'coloursVBO': variável local não referenciada
-  OpenGLTest.vcxproj -> C:\Users\Raissa\source\repos\OpenGL Basics\OpenGLTest\Debug\OpenGLTest.exe
