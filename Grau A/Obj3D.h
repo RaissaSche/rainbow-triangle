@@ -19,6 +19,7 @@ public:
 
 	void addInfo(Mesh* mesh, glm::mat4 transform, int status, bool erasable, glm::vec3 direction,
 					string name, int id);
+	void addInfoTranslate(float tx, float ty, float tz);
 	void addInfoTransform(float tx, float ty, float tz, float s, float r);
 	void setStatus(int status);
 	int getStatus();
@@ -28,6 +29,7 @@ public:
 	glm::vec3 getDirection();
 	Mesh* getMesh();
 	glm::mat4 getTransform();
+	string getName();
 	void setName(string name);
 	void setId(int id);
 };

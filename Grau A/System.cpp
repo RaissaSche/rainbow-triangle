@@ -88,7 +88,7 @@ void System::Run()
 	char path[] = "textures/mesa01.bmp";
 	char textureUniformName[] = "texture1";
 	coreShader.LoadTexture(path, textureUniformName, "woodTexture");
-	
+
 	//view
 	glm::mat4 view;
 	view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
@@ -96,15 +96,24 @@ void System::Run()
 	//proj
 	glm::mat4 proj = glm::mat4(1.0f);
 	proj = glm::perspective(60.0f / 180.f * 3.1416f, (float)width / (float)height, 0.1f, 100.0f);
-	
-	GLuint VAO;
-	ManageObj* manageObj = new ManageObj();
-	for (int i = 0; i < objs.size(); i++){
-	manageObj->ObjToVBO(objs[i]);
-	VAO = objs[i]->getMesh()->getGroups()[i]->getVAO();
 
-	glBindVertexArray(VAO);
-	glBindVertexArray(0); // Unbind VAO
+	GLuint VAO;
+	int shotLocation = -1;
+	ManageObj* manageObj = new ManageObj();
+	for (int i = 0; i < objs.size(); i++) {
+		manageObj->ObjToVBO(objs[i]);
+		vector<Group*> groups = objs[i]->getMesh()->getGroups();
+
+		for (int j = 0; j < groups.size(); j++) {
+			VAO = groups[j]->getVAO();
+
+			glBindVertexArray(VAO);
+			glBindVertexArray(0); // Unbind VAO
+		}
+
+		if (objs[i]->getName() == "Shot") {
+			shotLocation = i;
+		}
 	}
 
 	while (!glfwWindowShouldClose(window)) {
@@ -112,7 +121,7 @@ void System::Run()
 		glfwPollEvents();
 
 #pragma region Input Handling
-		
+
 		const float cameraSpeed = 0.05f; // adjust accordingly
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -120,18 +129,25 @@ void System::Run()
 		}
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraUp;
+			//cameraTarget.y += 0.1;
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+			//if(shotLocation != -1){
+			//	objs[shotLocation]->addInfoTranslate(cameraPos.x, cameraPos.y + 1, cameraPos.z);
+			//}
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 			cameraPos -= cameraSpeed * cameraUp;
+			//cameraTarget.y -= 0.1;
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 			cameraPos -= glm::normalize(glm::cross(cameraUp, cameraPos)) * cameraSpeed;
+			//cameraTarget.x += 0.1;
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 			cameraPos += glm::normalize(glm::cross(cameraUp, cameraPos)) * cameraSpeed;
+			//cameraTarget.x -= 0.1;
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 
@@ -147,7 +163,7 @@ void System::Run()
 		glUniformMatrix4fv(viewU, 1, GL_FALSE, glm::value_ptr(view));
 		int projU = glGetUniformLocation(coreShader.program, "proj");
 		glUniformMatrix4fv(projU, 1, GL_FALSE, glm::value_ptr(proj));
-	
+
 		for (Obj3D* obj : objs) {
 			Mesh* mesh = obj->getMesh();
 

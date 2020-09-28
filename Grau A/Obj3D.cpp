@@ -12,6 +12,12 @@ void Obj3D::addInfo(Mesh* mesh, glm::mat4 transform, int status, bool erasable,
 	this->id = id;
 }
 
+void Obj3D::addInfoTranslate(float tx, float ty, float tz)
+{
+	transform = glm::mat4(1.0f);
+	transform = glm::translate(transform, glm::vec3(tx, ty, tz));
+}
+
 void Obj3D::addInfoTransform(float tx, float ty, float tz, float s, float r)
 {
 	transform = glm::mat4(1.0f);
@@ -56,6 +62,11 @@ Mesh* Obj3D::getMesh() {
 glm::mat4 Obj3D::getTransform()
 {
 	return transform;
+}
+
+string Obj3D::getName()
+{
+	return name;
 }
 
 void Obj3D::setName(string name)
