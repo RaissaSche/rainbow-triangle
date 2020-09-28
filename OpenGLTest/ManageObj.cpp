@@ -155,8 +155,8 @@ void ManageObj::ObjToVBO(Obj3D* obj3D) {
 				//texts
 				if (!f->getTexts().empty()) {
 					glm::vec2* vt = mesh->getTexts()[f->getTexts()[i]];
-					vts.push_back(v->x);
-					vts.push_back(v->y);
+					vts.push_back(vt->x);
+					vts.push_back(vt->y);
 				}
 			}
 		}

@@ -67,7 +67,7 @@ int System::OpenGLSetup()
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 
 	return EXIT_SUCCESS;
 }
@@ -85,8 +85,10 @@ void System::Run()
 {
 
 	coreShader.Use();
-	//coreShader.LoadTexture("images/woodTexture.jpg", "texture1", "woodTexture");
-
+	char path[] = "textures/mesa01.bmp";
+	char textureUniformName[] = "texture1";
+	coreShader.LoadTexture(path, textureUniformName, "woodTexture");
+	
 	//view
 	glm::mat4 view;
 	view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
@@ -94,7 +96,7 @@ void System::Run()
 	//proj
 	glm::mat4 proj = glm::mat4(1.0f);
 	proj = glm::perspective(60.0f / 180.f * 3.1416f, (float)width / (float)height, 0.1f, 100.0f);
-
+	
 	GLuint VAO;
 	ManageObj* manageObj = new ManageObj();
 	for (int i = 0; i < objs.size(); i++){
@@ -105,13 +107,12 @@ void System::Run()
 	glBindVertexArray(0); // Unbind VAO
 	}
 
-
 	while (!glfwWindowShouldClose(window)) {
 
 		glfwPollEvents();
 
 #pragma region Input Handling
-
+		
 		const float cameraSpeed = 0.05f; // adjust accordingly
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -140,8 +141,7 @@ void System::Run()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		coreShader.Use();
-
-		//coreShader.UseTexture("woodTexture");
+		coreShader.UseTexture("woodTexture");
 
 		int viewU = glGetUniformLocation(coreShader.program, "view");
 		glUniformMatrix4fv(viewU, 1, GL_FALSE, glm::value_ptr(view));
@@ -163,6 +163,7 @@ void System::Run()
 				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices(3));
 			}
 		}
+
 		glfwSwapBuffers(window);
 	}
 }
