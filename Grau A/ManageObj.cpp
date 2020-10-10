@@ -1,5 +1,6 @@
 #include "ManageObj.h"
 #include "Group.h"
+#include "Material.h"
 #include <fstream>
 #include <sstream>
 
@@ -56,7 +57,7 @@ Obj3D* ManageObj::readObj(string fileName)
 				while (getline(stoken, aux, '/')) {
 					// v, v/t/n, v/t e v//n
 					switch (it) {
-					case 0: 
+					case 0:
 						x = stoi(aux);
 						v = x - 1;
 						if (x > max->x) {
@@ -68,7 +69,7 @@ Obj3D* ManageObj::readObj(string fileName)
 						break;
 					case 1:
 						y = stoi(aux);
-						if (!aux.empty()) { 
+						if (!aux.empty()) {
 							t = y - 1;
 							if (y > max->y) {
 								max->y = y;
@@ -78,7 +79,7 @@ Obj3D* ManageObj::readObj(string fileName)
 							}
 						}
 						break;
-					case 2: 
+					case 2:
 						z = stoi(aux);
 						n = z - 1;
 						if (z > max->z) {
@@ -98,13 +99,13 @@ Obj3D* ManageObj::readObj(string fileName)
 		else if (temp == "g") {
 			string token;
 			sline >> token;
-			if (firstGroup){
+			if (firstGroup) {
 				g_atual->setName(token);
 				firstGroup = false;
 			}
 			else {
 				mesh->addGroup(g_atual);
-				g_atual = new Group;
+				g_atual = new Group();
 				g_atual->setName(token);
 			}
 		}
@@ -112,7 +113,7 @@ Obj3D* ManageObj::readObj(string fileName)
 			string token;
 			sline >> token;
 
-			g_atual->setMaterial(token);
+			g_atual->setMtlName(token);
 		}
 	}
 	mesh->addGroup(g_atual);
@@ -123,9 +124,71 @@ Obj3D* ManageObj::readObj(string fileName)
 	return obj3D;
 }
 
+vector<Material*> ManageObj::readMtl(string fileName)
+{
+	vector<Material*> materials;
+	Material* material = new Material();
+	bool firstMaterial = true;
+	ifstream arq(fileName);
 
-void ManageObj::ObjToVBO(Obj3D* obj3D) {
+	while (!arq.eof()) {
+		string line;
+		getline(arq, line);
+		stringstream sline;
+		sline << line;
+		string temp;
+		sline >> temp;
 
+		if (temp == "newmtl") {
+			string id;
+			sline >> id;
+			
+			if (firstMaterial) {
+				material->setId(id);
+				firstMaterial = false;
+			}
+			else {
+				materials.push_back(material);
+				material = new Material();
+				material->setId(id);
+			}
+		}
+		else if (temp == "Ka") {
+			float r, g, b;
+			sline >> r >> g >> b;
+			glm::vec3* ka = new glm::vec3(r, g, b);
+			material->setKa(ka);
+		}
+		else if (temp == "Kd") {
+			float r, g, b;
+			sline >> r >> g >> b;
+			glm::vec3* kd = new glm::vec3(r, g, b);
+			material->setKd(kd);
+		}
+		else if (temp == "Ks") {
+			float r, g, b;
+			sline >> r >> g >> b;
+			glm::vec3* ks = new glm::vec3(r, g, b);
+			material->setKs(ks);
+		}
+		else if (temp == "Ns") {
+			float ns;
+			sline >> ns;
+			material->setNs(ns);
+		}
+		else if (temp == "map_Kd") {
+			string map_kd;
+			sline >> map_kd;
+			material->setMap_Kd(map_kd);
+		}
+	}
+	materials.push_back(material);
+	return materials;
+}
+
+
+void ManageObj::ObjToVBO(Obj3D* obj3D)
+{
 	Mesh* mesh = obj3D->getMesh();
 
 	for (int i = 0; i < mesh->getGroups().size(); i++)

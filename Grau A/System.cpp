@@ -97,9 +97,16 @@ void System::Run()
 	glm::mat4 proj = glm::mat4(1.0f);
 	proj = glm::perspective(60.0f / 180.f * 3.1416f, (float)width / (float)height, 0.1f, 100.0f);
 
+	//Teste
+
+	
 	GLuint VAO;
 	int shotLocation = -1;
 	ManageObj* manageObj = new ManageObj();
+
+	//mtl file reading test
+	//vector<Material*> materials = manageObj->readMtl("objs3D/mesa01.mtl");
+
 	for (int i = 0; i < objs.size(); i++) {
 		manageObj->ObjToVBO(objs[i]);
 		vector<Group*> groups = objs[i]->getMesh()->getGroups();
@@ -130,24 +137,33 @@ void System::Run()
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraUp;
 			//cameraTarget.y += 0.1;
-			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 			//if(shotLocation != -1){
-			//	objs[shotLocation]->addInfoTranslate(cameraPos.x, cameraPos.y + 1, cameraPos.z);
+			//	objs[shotLocation]->addInfoTranslate(cameraPos.x + 1, cameraPos.y + 1, cameraPos.z + 1);
 			//}
+			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 			cameraPos -= cameraSpeed * cameraUp;
 			//cameraTarget.y -= 0.1;
+			//if(shotLocation != -1){
+			//	objs[shotLocation]->addInfoTranslate(cameraPos.x + 1, cameraPos.y + 1, cameraPos.z + 1);
+			//}
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 			cameraPos -= glm::normalize(glm::cross(cameraUp, cameraPos)) * cameraSpeed;
 			//cameraTarget.x += 0.1;
+			//if(shotLocation != -1){
+			//	objs[shotLocation]->addInfoTranslate(cameraPos.x + 1, cameraPos.y + 1, cameraPos.z + 1);
+			//}
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 			cameraPos += glm::normalize(glm::cross(cameraUp, cameraPos)) * cameraSpeed;
 			//cameraTarget.x -= 0.1;
+			//if(shotLocation != -1){
+			//	objs[shotLocation]->addInfoTranslate(cameraPos.x + 1, cameraPos.y + 1, cameraPos.z + 1);
+			//}
 			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 		}
 
@@ -175,8 +191,7 @@ void System::Run()
 				//Material *material = getMaterial(g->material);
 				//glBindTexture(GL_TEXTURE_2D, material->tid);
 
-				//fix this!
-				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices(3));
+				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices());
 			}
 		}
 

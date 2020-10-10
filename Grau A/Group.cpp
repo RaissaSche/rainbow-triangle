@@ -1,12 +1,6 @@
 #include "Group.h"
 
 
-void Group::initializeGroup(string name, string material, vector<Face*> faces) {
-	this->name = name;
-	this->material = material;
-	this->faces = faces;
-}
-
 unsigned int Group::getVAO()
 {
 	return VAO;
@@ -17,9 +11,9 @@ void Group::setVAO(unsigned int VAO)
 	this->VAO = VAO;
 }
 
-int Group::getNumOfvertices(int vertexesPerFace)
+int Group::getNumOfvertices()
 {
-	return faces.size() * vertexesPerFace;
+	return faces.size() * 3;
 }
 
 void Group::addFace(Face* face)
@@ -37,7 +31,12 @@ void Group::setName(string name)
 	this->name = name;
 }
 
-void Group::setMaterial(string material)
+void Group::setMtlName(string mtlName)
 {
-	this->material = material;
+	this->mtlName = mtlName;
+}
+
+void Group::addMaterial(Material* material)
+{
+	materials.push_back(material);
 }
