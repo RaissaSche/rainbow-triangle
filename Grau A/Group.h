@@ -13,8 +13,7 @@ class Group
 {
 private:
 	string name;
-	string mtlName;
-	vector<Material*> materials;
+	string material;
 	vector<Face*> faces;
 	unsigned int VAO;
 
@@ -25,6 +24,6 @@ public:
 	void addFace(Face* face);
 	vector<Face*> getFaces();
 	void setName(string name);
-	void setMtlName(string mtlName);
-	void addMaterial(Material* material);
+	void setMaterial(string material);
+	string getMaterial();
 };

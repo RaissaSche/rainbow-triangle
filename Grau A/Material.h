@@ -18,7 +18,9 @@ private:
 
 public:
 	void setId(string id);
+	string getId();
 	void setKa(glm::vec3* ka);
+	glm::vec3* getKa();
 	void setKd(glm::vec3* kd);
 	void setKs(glm::vec3* ks);
 	void setNs(float ns);

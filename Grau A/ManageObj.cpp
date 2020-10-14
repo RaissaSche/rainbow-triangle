@@ -113,7 +113,7 @@ Obj3D* ManageObj::readObj(string fileName)
 			string token;
 			sline >> token;
 
-			g_atual->setMtlName(token);
+			g_atual->setMaterial(token);
 		}
 	}
 	mesh->addGroup(g_atual);

@@ -23,6 +23,7 @@
 #include "Shader.h"
 #include "Time.h"
 #include "Obj3D.h"
+#include "Material.h"
 
 class System
 {
@@ -49,6 +50,7 @@ public:
 
 	void Finish();
 
+	Material* getMaterials(vector<Material*> materials, string material);
 };
 
 #endif

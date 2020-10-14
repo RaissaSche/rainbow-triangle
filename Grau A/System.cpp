@@ -96,17 +96,12 @@ void System::Run()
 	//proj
 	glm::mat4 proj = glm::mat4(1.0f);
 	proj = glm::perspective(60.0f / 180.f * 3.1416f, (float)width / (float)height, 0.1f, 100.0f);
-
-	//Teste
-
 	
 	GLuint VAO;
 	int shotLocation = -1;
 	ManageObj* manageObj = new ManageObj();
 
-	//mtl file reading test
-	//vector<Material*> materials = manageObj->readMtl("objs3D/mesa01.mtl");
-
+	vector<Material*> materials = manageObj->readMtl("objs3D/mesa01.mtl");
 	for (int i = 0; i < objs.size(); i++) {
 		manageObj->ObjToVBO(objs[i]);
 		vector<Group*> groups = objs[i]->getMesh()->getGroups();
@@ -188,8 +183,14 @@ void System::Run()
 
 			for (Group* g : mesh->getGroups()) {
 				glBindVertexArray(g->getVAO());
-				//Material *material = getMaterial(g->material);
-				//glBindTexture(GL_TEXTURE_2D, material->tid);
+				Material *material = getMaterials(materials, g->getMaterial());
+				if (material != nullptr) {
+					int ka = glGetUniformLocation(coreShader.program, "ka");
+					glm::vec3 kaNoPointer = glm::vec3(
+						material->getKa()->x, material->getKa()->y, material->getKa()->z);
+					glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(kaNoPointer));
+				}
+				//glBindTexture(GL_TEXTURE_2D, material->tid);proj
 
 				glDrawArrays(GL_TRIANGLES, 0, g->getNumOfvertices());
 			}
@@ -204,4 +205,14 @@ void System::Finish()
 	coreShader.Delete();
 
 	glfwTerminate();
+}
+
+Material* System::getMaterials(vector<Material*> materials, string material)
+{
+	for (int i = 0; i < materials.size(); i++) {
+		if (materials[i]->getId() == material) {
+			return materials[i];
+		}
+	}
+	return nullptr;
 }

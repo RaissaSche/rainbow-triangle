@@ -31,12 +31,12 @@ void Group::setName(string name)
 	this->name = name;
 }
 
-void Group::setMtlName(string mtlName)
+void Group::setMaterial(string material)
 {
-	this->mtlName = mtlName;
+	this->material = material;
 }
 
-void Group::addMaterial(Material* material)
+string Group::getMaterial()
 {
-	materials.push_back(material);
+	return material;
 }

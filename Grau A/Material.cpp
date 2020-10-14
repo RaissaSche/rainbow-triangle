@@ -5,9 +5,19 @@ void Material::setId(string id)
 	this->id = id;
 }
 
+string Material::getId()
+{
+	return id;
+}
+
 void Material::setKa(glm::vec3* ka)
 {
 	this->ka = ka;
+}
+
+glm::vec3* Material::getKa()
+{
+	return ka;
 }
 
 void Material::setKd(glm::vec3* kd)
