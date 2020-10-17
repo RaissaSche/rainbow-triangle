@@ -8,14 +8,14 @@ out vec4 color;
 
 uniform sampler2D texture1;
 uniform vec3 lightPos;
-uniform vec3 cameraPos;
+uniform vec3 cameraPosLight;
 uniform vec3 ka;
 //uniform vec3 kd;
 uniform vec3 ks;
 uniform float ns;
 uniform float la;
 
-//float La = 0.9;
+/*float La = 0.9;
 float Ld = 0.9;
 vec3 kd = vec3 (0.9, 0.9, 0.9);
 vec3 v1 = vec3 (0.9, 0.9, 0.9);
@@ -53,9 +53,15 @@ float pow (float toMultiply, int multiplier){
 	return result;
 }
 
+float ambient(float kaColorValue){
+return kaColorValue;
+}
+*/
+
 void main(){
 	vec4 tex1 = texture( texture1, TexCoord );
 	
+	/*
 	float Ad = max(0, dot(normal(v1), v1));
 
 	vec4 V = cam_pos - frag_pos;
@@ -68,6 +74,7 @@ void main(){
 	//float Ir = (La * ka.x) + fatt(v1) * ( (Ld* kd.x * Ad) + s + ns );
 	//float Ig = (La * ka.y) + fatt(v1) * ( (Ld* kd.y * Ad) + s );
 	//float Ib = (La * ka.z) + fatt(v1) * ( (Ld* kd.z * Ad) + s );
+	*/
 
 	/*
 	color.r = Ir * tex1.x;
@@ -75,12 +82,10 @@ void main(){
 	color.b = Ib * tex1.z;
 	*/
 
-	/*
-	color.r = lightPos.x * tex1.x;
-	color.g = lightPos.y * tex1.y;
-	color.b = lightPos.z * tex1.z;
-	*/
-
+	//color.r = ambient(la) * tex1.x;
+	//color.g = ambient(la) * tex1.y;
+	//color.b = ambient(la) * tex1.z;	
+	
 	color = tex1;
 }
 

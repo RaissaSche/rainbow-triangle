@@ -109,8 +109,9 @@ Obj3D* ManageObj::readObj(string fileName)
 				g_atual->setName(token);
 			}
 		}
-		else if (temp == "mtllib") {
+		else if (temp == "usemtl") {
 			string token;
+			sline >> token;
 			sline >> token;
 
 			g_atual->setMaterial(token);

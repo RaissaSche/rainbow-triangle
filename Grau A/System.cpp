@@ -218,15 +218,16 @@ Material* System::getMaterials(vector<Material*> materials, string material)
 
 void System::populateMtlValues(Material* material, int loc)
 {
+	
 	int lightPosU = glGetUniformLocation(coreShader.program, "lightPos");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(lightPos));
-
-	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPos");
+	/*
+	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPosLight");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
-
+	*/
 	int laU = glGetUniformLocation(coreShader.program, "la");
 	glUniform1f(loc, la);
-
+	/*
 	int ka = glGetUniformLocation(coreShader.program, "ka");
 	glm::vec3 kaNoPointer = glm::vec3(
 		material->getKa()->x, material->getKa()->y, material->getKa()->z);
@@ -244,5 +245,5 @@ void System::populateMtlValues(Material* material, int loc)
 
 	int ns = glGetUniformLocation(coreShader.program, "ns");
 	glUniform1f(loc, material->getNs());
-
+	*/
 }
