@@ -34,6 +34,9 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
+	glm::vec3 lightPos;
+	float la;
+
 public:
 	GLFWwindow* window;
 	Shader coreShader;
@@ -51,6 +54,7 @@ public:
 	void Finish();
 
 	Material* getMaterials(vector<Material*> materials, string material);
+	void populateMtlValues(Material* material, int loc);
 };
 
 #endif

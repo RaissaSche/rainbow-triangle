@@ -89,6 +89,22 @@ void ConfigureScene::readFile(string fileName)
 			cameraUp.z = stoi(token);
 
 		}
+		else if (temp == "light") {
+			string token;
+
+			//position
+			lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+			sline >> token;
+			lightPos.x = stoi(token);
+			sline >> token;
+			lightPos.y = stoi(token);
+			sline >> token;
+			lightPos.z = stoi(token);
+
+			//la
+			sline >> token;
+			la = stof(token);
+			}
 		else if (temp == "viewport") {
 			string token;
 			sline >> token;
@@ -117,6 +133,16 @@ glm::vec3 ConfigureScene::getCameraTarget()
 glm::vec3 ConfigureScene::getCameraUp()
 {
 	return cameraUp;
+}
+
+glm::vec3 ConfigureScene::getLightPos()
+{
+	return lightPos;
+}
+
+float ConfigureScene::getLa()
+{
+	return la;
 }
 
 int ConfigureScene::getWidth()

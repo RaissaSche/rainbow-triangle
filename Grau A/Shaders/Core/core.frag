@@ -1,20 +1,25 @@
 #version 400 core
 
 in vec2 TexCoord;
-layout ( location = 3 ) in vec3 ka;
+in vec2 normCoord;
+in vec4 frag_pos;
 
 out vec4 color;
 
 uniform sampler2D texture1;
+uniform vec3 lightPos;
+uniform vec3 cameraPos;
+uniform vec3 ka;
+//uniform vec3 kd;
+uniform vec3 ks;
+uniform float ns;
+uniform float la;
 
-float La = 0.8;
-vec3 tempKa = vec3(0.5, 0.3, 0.7);
-float Ld = 0.7;
+//float La = 0.9;
+float Ld = 0.9;
 vec3 kd = vec3 (0.9, 0.9, 0.9);
-vec3 v1 = vec3 (0.5, 0.5, 0.5);
-vec3 cam_pos = vec3(0.0, 0.0, 0.0);
-vec3 frag_pos = vec3(0.15, 0.15, 0.15);
-int n = 3;
+vec3 v1 = vec3 (0.9, 0.9, 0.9);
+vec4 cam_pos = vec4(0.0, 0.0, 0.0, 0.0);
 
 float length (vec3 v1){
 	return sqrt((v1.x * v1.x) + (v1.y * v1.y) + (v1.z * v1.z));
@@ -29,7 +34,7 @@ vec3 normal (vec3 v1){
 	return n;
 }
 
-float dot (vec3 v1, vec3 v2) {
+float dot (vec4 v1, vec3 v2) {
 	return v1.x * v2.x
 		 + v1.y * v2.y
 		 + v1.z * v2.z;
@@ -53,22 +58,30 @@ void main(){
 	
 	float Ad = max(0, dot(normal(v1), v1));
 
-	vec3 V = cam_pos - frag_pos;
+	vec4 V = cam_pos - frag_pos;
 	//R = N * (1 - Ad) - L
 	vec3 R = normal(v1) * (1 - Ad) - v1;
 	float As = dot (V, R);
-	float s = pow (As, n);
+	float s = pow (As, ns);
 
-	//          ambient          fatt        diffuse           specular
-	float Ir = (La * tempKa.x) + fatt(v1) * ( (Ld* kd.x * Ad) + s );
-	float Ig = (La * tempKa.y) + fatt(v1) * ( (Ld* kd.y * Ad) + s );
-	float Ib = (La * tempKa.z) + fatt(v1) * ( (Ld* kd.z * Ad) + s );
+	//          ambient      fatt         diffuse          specular
+	//float Ir = (La * ka.x) + fatt(v1) * ( (Ld* kd.x * Ad) + s + ns );
+	//float Ig = (La * ka.y) + fatt(v1) * ( (Ld* kd.y * Ad) + s );
+	//float Ib = (La * ka.z) + fatt(v1) * ( (Ld* kd.z * Ad) + s );
 
+	/*
 	color.r = Ir * tex1.x;
 	color.g = Ig * tex1.y;
 	color.b = Ib * tex1.z;
+	*/
 
-	//color = tex1;
+	/*
+	color.r = lightPos.x * tex1.x;
+	color.g = lightPos.y * tex1.y;
+	color.b = lightPos.z * tex1.z;
+	*/
+
+	color = tex1;
 }
 
 /*
