@@ -9,7 +9,7 @@ private:
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
 	glm::vec3 lightPos;
-	float la;
+	float la, ld, ls;
 	int width, height;
 public:
 	void readFile(string fileName);
@@ -19,6 +19,8 @@ public:
 	glm::vec3 getCameraUp();
 	glm::vec3 getLightPos();
 	float getLa();
+	float getLd();
+	float getLs();
 	int getWidth();
 	int getHeight();
 };

@@ -35,7 +35,7 @@ private:
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
 	glm::vec3 lightPos;
-	float la;
+	float la, ld, ls;
 
 public:
 	GLFWwindow* window;

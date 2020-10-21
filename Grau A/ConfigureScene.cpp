@@ -104,6 +104,14 @@ void ConfigureScene::readFile(string fileName)
 			//la
 			sline >> token;
 			la = stof(token);
+
+			//ld
+			sline >> token;
+			ld = stof(token);
+
+			//ls
+			sline >> token;
+			ls = stof(token);
 			}
 		else if (temp == "viewport") {
 			string token;
@@ -143,6 +151,16 @@ glm::vec3 ConfigureScene::getLightPos()
 float ConfigureScene::getLa()
 {
 	return la;
+}
+
+float ConfigureScene::getLd()
+{
+	return ld;
+}
+
+float ConfigureScene::getLs()
+{
+	return ls;
 }
 
 int ConfigureScene::getWidth()

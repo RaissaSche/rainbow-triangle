@@ -7,25 +7,31 @@ in vec4 frag_pos;
 out vec4 color;
 
 uniform sampler2D texture1;
+
 uniform vec3 lightPos;
 uniform vec3 cameraPosLight;
-uniform vec3 ka;
-//uniform vec3 kd;
-uniform vec3 ks;
-uniform float ns;
+
 uniform float la;
+uniform float ld;
+uniform float ls;
 
-/*float La = 0.9;
-float Ld = 0.9;
-vec3 kd = vec3 (0.9, 0.9, 0.9);
-vec3 v1 = vec3 (0.9, 0.9, 0.9);
-vec4 cam_pos = vec4(0.0, 0.0, 0.0, 0.0);
+uniform vec3 ka;
+uniform vec3 kd;
+uniform vec3 ks;
 
-float length (vec3 v1){
+uniform float ns;
+
+uniform float mapKd;
+uniform float mapKs;
+
+uniform vec3 v1;
+
+
+float length (vec3 v1) {
 	return sqrt((v1.x * v1.x) + (v1.y * v1.y) + (v1.z * v1.z));
 }
 
-vec3 normal (vec3 v1){
+vec3 normal (vec3 v1) {
 	float l = length(v1);
 	vec3 n;
 	n.x = v1.x / l;
@@ -53,41 +59,54 @@ float pow (float toMultiply, int multiplier){
 	return result;
 }
 
-float ambient(float kaColorValue){
-return kaColorValue;
+float ambient(){
+	return la * ka;
 }
-*/
+
+float diffuse(int numOfLigths){
+	float d;
+	
+	for (int i = 0; i < numOfLigths; i++){
+		float Ad = max(0, dot(normal(v1), v1));
+		d = fatt(ld * kd * Ad) * mapKd;
+	}
+	
+	return d;
+}
+
+float specular(int numOfLigths){
+	float s;
+
+	for (int i = 0; i < numOfLigths; i++){
+		vec4 V = cameraPosLight - frag_pos;
+		//R = N * (1 - Ad) - L
+		float Ad = max(0, dot(normal(v1), v1));
+		vec3 R = normal(v1) * (1 - Ad) - v1;
+		float As = dot (V, R);
+		float s = pow (As, ns);
+		
+		s = fatt(ls * ks * s) * mapKs;
+	}
+	
+	return s;
+}
 
 void main(){
 	vec4 tex1 = texture( texture1, TexCoord );
-	
-	/*
-	float Ad = max(0, dot(normal(v1), v1));
+	int numOfLights = 1;
 
-	vec4 V = cam_pos - frag_pos;
-	//R = N * (1 - Ad) - L
-	vec3 R = normal(v1) * (1 - Ad) - v1;
-	float As = dot (V, R);
-	float s = pow (As, ns);
-
-	//          ambient      fatt         diffuse          specular
-	//float Ir = (La * ka.x) + fatt(v1) * ( (Ld* kd.x * Ad) + s + ns );
-	//float Ig = (La * ka.y) + fatt(v1) * ( (Ld* kd.y * Ad) + s );
-	//float Ib = (La * ka.z) + fatt(v1) * ( (Ld* kd.z * Ad) + s );
-	*/
-
-	/*
-	color.r = Ir * tex1.x;
-	color.g = Ig * tex1.y;
-	color.b = Ib * tex1.z;
-	*/
-
-	//color.r = ambient(la) * tex1.x;
-	//color.g = ambient(la) * tex1.y;
-	//color.b = ambient(la) * tex1.z;	
-	
-	color = tex1;
+	float I = ambient() * mapKd + diffuse(1) + specular(1);
+	color = I * tex1;
 }
+
+
+
+
+
+
+
+
+
 
 /*
 I = ambiente + fatt * (difusa + especular)
@@ -112,7 +131,6 @@ Id = Ld * Kd * Ad
 fatt = 1/(magnitude(L))^2
 
 //Calcular parcela especular, produto escalar R e V (pode utilizar simplifica��o Binn)
-	//dot
 
 	v = cam_pos - frag_pos
 	Ad = N.L
