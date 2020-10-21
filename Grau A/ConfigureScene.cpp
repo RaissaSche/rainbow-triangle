@@ -6,8 +6,7 @@
 void ConfigureScene::readFile(string fileName)
 {
 	ifstream arq(fileName);
-	int number;
-	int it = 0;
+	int objsNum, lightNum;
 
 	while (!arq.eof()) {
 		string line;
@@ -17,12 +16,11 @@ void ConfigureScene::readFile(string fileName)
 		string temp;
 		sline >> temp;
 
-		if (it == 0) { //first read
-			stringstream stemp;
-			stemp << temp;
-			number = stoi(temp);
+		if (temp == "objsNum") {
+			sline >> temp;
+			objsNum = stoi(temp);
 
-			for (int i = 0; i < number; i++) {
+			for (int i = 0; i < objsNum; i++) {
 
 				getline(arq, line);
 				stringstream slineAux;
@@ -38,16 +36,8 @@ void ConfigureScene::readFile(string fileName)
 				obj = manageObj->readObj(tempAux);
 				slineAux >> tempAux;
 				obj->setName(tempAux);
-				slineAux >> tempAux;
-				float tx = stod(tempAux);
-				slineAux >> tempAux;
-				float ty = stod(tempAux);
-				slineAux >> tempAux;
-				float tz = stod(tempAux);
-				slineAux >> tempAux;
-				float s = stod(tempAux);
-				slineAux >> tempAux;
-				float r = stod(tempAux);
+				float tx, ty, tz, s, r;
+				slineAux >> tx >> ty >> tz >> s >> r;
 
 				obj->addInfoTransform(tx, ty, tz, s, r);
 
@@ -56,63 +46,58 @@ void ConfigureScene::readFile(string fileName)
 
 				objs.push_back(obj);
 			}
-			it++;
 		}
 		else if (temp == "camera") {
 			string token;
+			float x, y, z;
 
 			//eye
-			cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
-			sline >> token;
-			cameraPos.x = stoi(token);
-			sline >> token;
-			cameraPos.y = stoi(token);
-			sline >> token;
-			cameraPos.z = stoi(token);
+			sline >> x >> y >> z;
+			cameraPos = glm::vec3(x, y, z);
 
 			//direction
-			cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-			sline >> token;
-			cameraTarget.x = stoi(token);
-			sline >> token;
-			cameraTarget.y = stoi(token);
-			sline >> token;
-			cameraTarget.z = stoi(token);
+			sline >> x >> y >> z;
+			cameraTarget = glm::vec3(x, y, z);
 
 			//up
-			cameraUp = glm::vec3(0.0f, 0.0f, 0.0f);
-			sline >> token;
-			cameraUp.x = stoi(token);
-			sline >> token;
-			cameraUp.y = stoi(token);
-			sline >> token;
-			cameraUp.z = stoi(token);
-
+			sline >> x >> y >> z;
+			cameraUp = glm::vec3(x, y, z);
 		}
-		else if (temp == "light") {
-			string token;
+		else if (temp == "lightNum") {
+			sline >> temp;
+			lightNum = stoi(temp);
 
-			//position
-			lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
-			sline >> token;
-			lightPos.x = stoi(token);
-			sline >> token;
-			lightPos.y = stoi(token);
-			sline >> token;
-			lightPos.z = stoi(token);
+			for (int i = 0; i < lightNum; i++) {
 
-			//la
-			sline >> token;
-			la = stof(token);
+				getline(arq, line);
+				stringstream slineAux;
+				slineAux << line;
+				string token;
+				slineAux >> token;
 
-			//ld
-			sline >> token;
-			ld = stof(token);
+				Light* light = new Light();
 
-			//ls
-			sline >> token;
-			ls = stof(token);
+				//position
+				float x, y, z;
+				sline >> x >> y >> z;
+				glm::vec3* pos = new glm::vec3(x, y, z);
+				light->setLightPos(pos);
+
+				//la
+				sline >> token;
+				light->setLa(stof(token));
+
+				//ld
+				sline >> token;
+				light->setLd(stof(token));
+
+				//ls
+				sline >> token;
+				light->setLs(stof(token));
+
+				lights.push_back(light);
 			}
+		}
 		else if (temp == "viewport") {
 			string token;
 			sline >> token;
@@ -128,6 +113,11 @@ vector<Obj3D*> ConfigureScene::getObjs()
 	return objs;
 }
 
+vector<Light*> ConfigureScene::getLights()
+{
+	return lights;
+}
+
 glm::vec3 ConfigureScene::getCameraPos()
 {
 	return cameraPos;
@@ -141,26 +131,6 @@ glm::vec3 ConfigureScene::getCameraTarget()
 glm::vec3 ConfigureScene::getCameraUp()
 {
 	return cameraUp;
-}
-
-glm::vec3 ConfigureScene::getLightPos()
-{
-	return lightPos;
-}
-
-float ConfigureScene::getLa()
-{
-	return la;
-}
-
-float ConfigureScene::getLd()
-{
-	return ld;
-}
-
-float ConfigureScene::getLs()
-{
-	return ls;
 }
 
 int ConfigureScene::getWidth()

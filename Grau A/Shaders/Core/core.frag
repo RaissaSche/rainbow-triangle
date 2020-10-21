@@ -6,8 +6,9 @@ in vec4 frag_pos;
 
 out vec4 color;
 
-uniform sampler2D texture1;
 
+uniform sampler2D texture1;
+/*
 uniform vec3 lightPos;
 uniform vec3 cameraPosLight;
 
@@ -90,13 +91,16 @@ float specular(int numOfLigths){
 	
 	return s;
 }
+*/
 
 void main(){
 	vec4 tex1 = texture( texture1, TexCoord );
-	int numOfLights = 1;
+	/*int numOfLights = 1;
 
 	float I = ambient() * mapKd + diffuse(1) + specular(1);
 	color = I * tex1;
+	*/
+	color = tex1;
 }
 
 
