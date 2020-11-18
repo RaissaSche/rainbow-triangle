@@ -34,7 +34,8 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
-	glm::vec3* lightPos;
+	glm::mat3 lightPos;
+	int lightNum;
 	float la, ld, ls;
 
 public:

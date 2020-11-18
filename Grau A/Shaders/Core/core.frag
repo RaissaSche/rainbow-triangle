@@ -8,8 +8,9 @@ out vec4 color;
 
 
 uniform sampler2D texture1;
-/*
-uniform vec3 lightPos;
+
+uniform int lightNum;
+uniform mat3 lightPos;
 uniform vec3 cameraPosLight;
 
 uniform float la;
@@ -65,41 +66,40 @@ float ambient(){
 }
 
 float diffuse(int numOfLigths){
-	float d;
+	float d = 0;
 	
 	for (int i = 0; i < numOfLigths; i++){
-		float Ad = max(0, dot(normal(v1), v1));
-		d = fatt(ld * kd * Ad) * mapKd;
+		float Ad = max(0, dot(normal(v1), v1)); /*!!!!!!!!!!!!!!*/
+		d += fatt(ld * kd * Ad) * mapKd; 
 	}
 	
 	return d;
 }
 
 float specular(int numOfLigths){
-	float s;
+	float s = 0;
 
 	for (int i = 0; i < numOfLigths; i++){
 		vec4 V = cameraPosLight - frag_pos;
 		//R = N * (1 - Ad) - L
-		float Ad = max(0, dot(normal(v1), v1));
-		vec3 R = normal(v1) * (1 - Ad) - v1;
+		float Ad = max(0, dot(normal(v1), v1)); /*!!!!!!!!!!!!!!!*/
+		vec3 R = normal(v1) * (1 - Ad) - v1; /*!!!!!!!!!!!!!!*/
 		float As = dot (V, R);
 		float s = pow (As, ns);
 		
-		s = fatt(ls * ks * s) * mapKs;
+		s += fatt(ls * ks * s) * mapKs;
 	}
 	
 	return s;
 }
-*/
 
-void main(){
+
+void main() {
 	vec4 tex1 = texture( texture1, TexCoord );
-	/*int numOfLights = 1;
 
-	float I = ambient() * mapKd + diffuse(1) + specular(1);
+	float I = ambient() * mapKd + diffuse(lightNum) + specular(lightNum);
 	color = I * tex1;
-	*/
+	
 	color = tex1;
 }
 

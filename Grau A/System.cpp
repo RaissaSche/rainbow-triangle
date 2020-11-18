@@ -31,11 +31,11 @@ int System::GLFWInit()
 	cameraPos = configureScene->getCameraPos();
 	cameraTarget = configureScene->getCameraTarget();
 	cameraUp = configureScene->getCameraUp();
-	vector<Light*> lights = configureScene->getLights();
-	lightPos = lights[0]->getLightPos();
-	la = lights[0]->getLa();
-	ld = lights[0]->getLd();
-	ls = lights[0]->getLs();
+	glm::mat3 lights = configureScene->getLights();
+	lightNum = configureScene->getLightNum();
+	la = configureScene->getLa();
+	ld = configureScene->getLd();
+	ls = configureScene->getLs();
 	objs = configureScene->getObjs();
 
 	window = glfwCreateWindow(width, height, "GA - Raissa Scheeren", nullptr, nullptr);
@@ -220,7 +220,10 @@ Material* System::getMaterials(vector<Material*> materials, string material)
 }
 
 void System::populateMtlValues(Material* material, int loc)
-{/*
+{
+	int lightNumU = glGetUniformLocation(coreShader.program, "lightNum");
+	glUniform1f(loc, lightNum);
+
 	int lightPosU = glGetUniformLocation(coreShader.program, "lightPos");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(lightPos));
 	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPosLight");
@@ -257,5 +260,4 @@ void System::populateMtlValues(Material* material, int loc)
 	int v1U = glGetUniformLocation(coreShader.program, "v1");
 	glm::vec3 v1 = glm::vec3(0.9f, 0.9f, 0.9f);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v1));
-	*/
 }

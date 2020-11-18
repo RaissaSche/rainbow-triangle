@@ -5,7 +5,8 @@ objs3D/sphere.obj Shot 0 0 2 0.1 0 0
 
 camera 0 0 -4 0 0 0 0 1 0
 
-lightNum 1
+lightNum 2
 10 10 10 0.9 0.8 0.7
+20 20 20
 
 viewport 800 600

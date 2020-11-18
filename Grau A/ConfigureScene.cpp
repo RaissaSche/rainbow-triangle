@@ -6,8 +6,8 @@
 void ConfigureScene::readFile(string fileName)
 {
 	ifstream arq(fileName);
-	int objsNum, lightNum;
-
+	int objsNum;
+	
 	while (!arq.eof()) {
 		string line;
 		getline(arq, line);
@@ -67,36 +67,50 @@ void ConfigureScene::readFile(string fileName)
 			sline >> temp;
 			lightNum = stoi(temp);
 
+			/*int rows = 3;
+			lights = new float* [2];
+			for (int i = 0; i < 2; ++i) {
+				lights[i] = new float[2];
+			}*/
+
+			//lights[2][0] = 13;
+			//lights[2][1] = 1;
+			//lights[2][2] = 3;
+
 			for (int i = 0; i < lightNum; i++) {
 
 				getline(arq, line);
 				stringstream slineAux;
 				slineAux << line;
 				string token;
-				slineAux >> token;
-
-				Light* light = new Light();
+				//slineAux >> token;
 
 				//position
 				float x, y, z;
-				sline >> x >> y >> z;
-				glm::vec3* pos = new glm::vec3(x, y, z);
-				light->setLightPos(pos);
+				slineAux >> x >> y >> z;
+				float light[] = { x, y, z };
 
-				//la
-				sline >> token;
-				light->setLa(stof(token));
+				//lights.push_back(light);
+				lights[i][0] = light[0];
+				lights[i][1] = light[1];
+				lights[i][2] = light[2];
 
-				//ld
-				sline >> token;
-				light->setLd(stof(token));
+				if (i == 0) {
 
-				//ls
-				sline >> token;
-				light->setLs(stof(token));
+					//la
+					slineAux >> token;
+					setLa(stof(token));
 
-				lights.push_back(light);
+					//ld
+					slineAux >> token;
+					setLd(stof(token));
+
+					//ls
+					slineAux >> token;
+					setLs(stof(token));
+				}
 			}
+
 		}
 		else if (temp == "viewport") {
 			string token;
@@ -113,7 +127,7 @@ vector<Obj3D*> ConfigureScene::getObjs()
 	return objs;
 }
 
-vector<Light*> ConfigureScene::getLights()
+glm::mat3 ConfigureScene::getLights()
 {
 	return lights;
 }
@@ -141,4 +155,39 @@ int ConfigureScene::getWidth()
 int ConfigureScene::getHeight()
 {
 	return height;
+}
+
+int ConfigureScene::getLightNum()
+{
+	return lightNum;
+}
+
+void ConfigureScene::setLa(float la)
+{
+	this->la = la;
+}
+
+float ConfigureScene::getLa()
+{
+	return la;
+}
+
+void ConfigureScene::setLd(float ld)
+{
+	this->ld = ld;
+}
+
+float ConfigureScene::getLd()
+{
+	return ld;
+}
+
+void ConfigureScene::setLs(float ls)
+{
+	this->ls = ls;
+}
+
+float ConfigureScene::getLs()
+{
+	return ls;
 }
