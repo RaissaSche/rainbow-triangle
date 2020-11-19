@@ -223,39 +223,40 @@ void System::populateMtlValues(Material* material)
 {
 	coreShader.Use();
 
-	/*int lightNumU = glGetUniformLocation(coreShader.program, "lightNum");
-	glUniform1f(loc, lightNum);
-
+	int lightNumU = glGetUniformLocation(coreShader.program, "lightNum");
+	glUniform1f(lightNumU, lightNum);
 	int lightPosU = glGetUniformLocation(coreShader.program, "lightPos");
-	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(lightPos));
+	glUniformMatrix4fv(lightPosU, 1, GL_FALSE, glm::value_ptr(lightPos));
+
+	/*
 	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPosLight");
-	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
+	glUniform3fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
 	*/
+
 	int laU = glGetUniformLocation(coreShader.program, "la");
 	glUniform1f(laU, la);
-	/*
 	int ldU = glGetUniformLocation(coreShader.program, "ld");
-	glUniform1f(loc, ld);
-	int lsU = glGetUniformLocation(coreShader.program, "ls");
-	glUniform1f(loc, ls);
-	*/
+	glUniform1f(ldU, ld);
+	//int lsU = glGetUniformLocation(coreShader.program, "ls");
+	//glUniform1f(lsU, ls);
+	
 	int kaU = glGetUniformLocation(coreShader.program, "ka");
 	glm::vec3 kaNoPointer = glm::vec3(
 		material->getKa()->x, material->getKa()->y, material->getKa()->z);
 	glUniform3fv(kaU, 1, glm::value_ptr(kaNoPointer));
-	/*
 	int kdU = glGetUniformLocation(coreShader.program, "kd");
 	glm::vec3 kdNoPointer = glm::vec3(
 		material->getKd()->x, material->getKd()->y, material->getKd()->z);
-	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(kdNoPointer));
-	int ksU = glGetUniformLocation(coreShader.program, "ks");
-	glm::vec3 ksNoPointer = glm::vec3(
-		material->getKs()->x, material->getKs()->y, material->getKs()->z);
-	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(ksNoPointer));
+	glUniform3fv(kdU, 1, glm::value_ptr(kdNoPointer));
+	//int ksU = glGetUniformLocation(coreShader.program, "ks");
+	//glm::vec3 ksNoPointer = glm::vec3(
+	//	material->getKs()->x, material->getKs()->y, material->getKs()->z);
+	//glUniform3fv(ksU, 1, glm::value_ptr(ksNoPointer));
 
-	int ns = glGetUniformLocation(coreShader.program, "ns");
-	glUniform1f(loc, material->getNs());
+	//int nsU = glGetUniformLocation(coreShader.program, "ns");
+	//glUniform1f(nsU, material->getNs());
 
+	/*
 	int mapKdU = glGetUniformLocation(coreShader.program, "mapKd");
 	glUniform1f(loc, material->getTid_Mapkd());
 	int mapKsU = glGetUniformLocation(coreShader.program, "mapKs");
