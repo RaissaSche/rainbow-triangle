@@ -190,7 +190,7 @@ void System::Run()
 				glBindVertexArray(g->getVAO());
 				Material* material = getMaterials(materials, g->getMaterial());
 				if (material != nullptr) {
-					populateMtlValues(material, loc);
+					populateMtlValues(material);
 				}
 				//glBindTexture(GL_TEXTURE_2D, material->tid);
 
@@ -219,45 +219,45 @@ Material* System::getMaterials(vector<Material*> materials, string material)
 	return nullptr;
 }
 
-void System::populateMtlValues(Material* material, int loc)
+void System::populateMtlValues(Material* material)
 {
-	int lightNumU = glGetUniformLocation(coreShader.program, "lightNum");
+	coreShader.Use();
+
+	/*int lightNumU = glGetUniformLocation(coreShader.program, "lightNum");
 	glUniform1f(loc, lightNum);
 
 	int lightPosU = glGetUniformLocation(coreShader.program, "lightPos");
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(lightPos));
+	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(lightPos));
 	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPosLight");
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
-
+	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
+	*/
 	int laU = glGetUniformLocation(coreShader.program, "la");
-	glUniform1f(loc, la);
+	glUniform1f(laU, la);
+	/*
 	int ldU = glGetUniformLocation(coreShader.program, "ld");
 	glUniform1f(loc, ld);
 	int lsU = glGetUniformLocation(coreShader.program, "ls");
 	glUniform1f(loc, ls);
-
-	int ka = glGetUniformLocation(coreShader.program, "ka");
+	*/
+	int kaU = glGetUniformLocation(coreShader.program, "ka");
 	glm::vec3 kaNoPointer = glm::vec3(
 		material->getKa()->x, material->getKa()->y, material->getKa()->z);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(kaNoPointer));
-	int kd = glGetUniformLocation(coreShader.program, "kd");
+	glUniform3fv(kaU, 1, glm::value_ptr(kaNoPointer));
+	/*
+	int kdU = glGetUniformLocation(coreShader.program, "kd");
 	glm::vec3 kdNoPointer = glm::vec3(
 		material->getKd()->x, material->getKd()->y, material->getKd()->z);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(kdNoPointer));
-	int ks = glGetUniformLocation(coreShader.program, "ks");
+	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(kdNoPointer));
+	int ksU = glGetUniformLocation(coreShader.program, "ks");
 	glm::vec3 ksNoPointer = glm::vec3(
 		material->getKs()->x, material->getKs()->y, material->getKs()->z);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(ksNoPointer));
+	glUniform4fv(loc, 1, GL_FALSE, glm::value_ptr(ksNoPointer));
 
 	int ns = glGetUniformLocation(coreShader.program, "ns");
 	glUniform1f(loc, material->getNs());
 
 	int mapKdU = glGetUniformLocation(coreShader.program, "mapKd");
-	glUniform1f(loc, 0.5f);
+	glUniform1f(loc, material->getTid_Mapkd());
 	int mapKsU = glGetUniformLocation(coreShader.program, "mapKs");
-	glUniform1f(loc, 0.6f);
-
-	int v1U = glGetUniformLocation(coreShader.program, "v1");
-	glm::vec3 v1 = glm::vec3(0.9f, 0.9f, 0.9f);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v1));
+	glUniform1f(loc, material->getTid_Mapks());*/
 }

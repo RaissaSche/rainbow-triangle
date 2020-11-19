@@ -55,7 +55,7 @@ public:
 	void Finish();
 
 	Material* getMaterials(vector<Material*> materials, string material);
-	void populateMtlValues(Material* material, int loc);
+	void populateMtlValues(Material* material);
 };
 
 #endif
