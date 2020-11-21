@@ -1,6 +1,5 @@
 #pragma once
 #include "Obj3D.h"
-#include "Light.h"
 
 class ConfigureScene
 {

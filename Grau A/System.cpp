@@ -237,8 +237,8 @@ void System::populateMtlValues(Material* material)
 	glUniform1f(laU, la);
 	int ldU = glGetUniformLocation(coreShader.program, "ld");
 	glUniform1f(ldU, ld);
-	//int lsU = glGetUniformLocation(coreShader.program, "ls");
-	//glUniform1f(lsU, ls);
+	int lsU = glGetUniformLocation(coreShader.program, "ls");
+	glUniform1f(lsU, ls);
 	
 	int kaU = glGetUniformLocation(coreShader.program, "ka");
 	glm::vec3 kaNoPointer = glm::vec3(
@@ -248,13 +248,13 @@ void System::populateMtlValues(Material* material)
 	glm::vec3 kdNoPointer = glm::vec3(
 		material->getKd()->x, material->getKd()->y, material->getKd()->z);
 	glUniform3fv(kdU, 1, glm::value_ptr(kdNoPointer));
-	//int ksU = glGetUniformLocation(coreShader.program, "ks");
-	//glm::vec3 ksNoPointer = glm::vec3(
-	//	material->getKs()->x, material->getKs()->y, material->getKs()->z);
-	//glUniform3fv(ksU, 1, glm::value_ptr(ksNoPointer));
+	int ksU = glGetUniformLocation(coreShader.program, "ks");
+	glm::vec3 ksNoPointer = glm::vec3(
+		material->getKs()->x, material->getKs()->y, material->getKs()->z);
+	glUniform3fv(ksU, 1, glm::value_ptr(ksNoPointer));
 
-	//int nsU = glGetUniformLocation(coreShader.program, "ns");
-	//glUniform1f(nsU, material->getNs());
+	int nsU = glGetUniformLocation(coreShader.program, "ns");
+	glUniform1f(nsU, material->getNs());
 
 	/*
 	int mapKdU = glGetUniformLocation(coreShader.program, "mapKd");

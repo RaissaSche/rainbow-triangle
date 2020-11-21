@@ -13,37 +13,59 @@ uniform mat3 lightPos;
 
 uniform float la;
 uniform float ld;
+uniform float ls;
 
 uniform vec3 ka;
-uniform float kd;
+uniform vec3 kd;
+uniform vec3 ks;
+
+uniform float ns;
 
 vec3 ambient(){
 	return la * ka;
 }
 
-float diffuse(vec3 lightPos){	
-	vec3 V = lightPos - vec3(frag_pos.x, frag_pos.y, frag_pos.z);
+vec3 diffuse(vec3 lightPosV){	
+	vec3 V = lightPosV - vec3(frag_pos.x, frag_pos.y, frag_pos.z);
 		
 	float Ad = max(0, dot(normal, normalize(V)));
-	float d = ld * kd * Ad;
+	vec3 d = ld * kd * Ad;
 	//* texture(mapKd, TexCoord); 
 	
-	if(d < 0){
-		d = 0;
+	if(d.x < 0 || d.y < 0 || d.z < 0){
+		d = vec3(0, 0, 0);
 	}
 
 	return d;
 }
 
+vec3 specular(vec3 lightPosV){
+	vec3 V = lightPosV - vec3(frag_pos.x, frag_pos.y, frag_pos.z);
+
+	vec3 R = reflect(normal, lightPosV);
+	float As = dot (V, R);
+	float sAux = pow (As, ns);
+		
+	vec3 s = ls * ks * sAux;
+	//* mapKs;
+
+	if(s.x < 0 || s.y < 0 || s.z < 0){
+		s = vec3(0, 0, 0);
+	}
+
+	return s;
+}
+
 void main(){
 	vec4 tex1 = texture (texture1, TexCoord);
 	vec4 a = vec4(ambient(), 1); 
-	float diff = 0;
+	vec3 diff, spec;
 
 	for (int i = 0; i < lightNum; i++){
 		diff += diffuse(lightPos[i]);
+		spec += specular(lightPos[i]);
 	}
 
-	vec4 I = a + diff;
+	vec4 I = a + diff + spec;
 	color = I * tex1;
 }
