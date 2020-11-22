@@ -30,7 +30,9 @@ public:
 	void setNs(float ns);
 	float getNs();
 	void setMap_Kd(string map_kd);
+	string getMap_Kd();
 	void setMap_Ks(string map_ks);
+	string getMap_Ks();
 	void setTid_Mapkd(unsigned int tid_mapkd);
 	void setTid_Mapks(unsigned int tid_mapks);
 };

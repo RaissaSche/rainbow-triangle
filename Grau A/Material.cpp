@@ -53,9 +53,19 @@ void Material::setMap_Kd(string map_kd)
 	this->map_kd = map_kd;
 }
 
+string Material::getMap_Kd()
+{
+	return map_kd;
+}
+
 void Material::setMap_Ks(string map_ks)
 {
 	this->map_ks = map_ks;
+}
+
+string Material::getMap_Ks()
+{
+	return map_ks;
 }
 
 void Material::setTid_Mapkd(unsigned int tid_mapkd)

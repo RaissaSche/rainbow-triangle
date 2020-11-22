@@ -91,7 +91,7 @@ void System::Run()
 
 	coreShader.Use();
 	char path[] = "textures/mesa01.bmp";
-	char textureUniformName[] = "texture1";
+	char textureUniformName[] = "mapKd";
 	coreShader.LoadTexture(path, textureUniformName, "woodTexture");
 
 	//view
@@ -256,9 +256,6 @@ void System::populateMtlValues(Material* material)
 	int nsU = glGetUniformLocation(coreShader.program, "ns");
 	glUniform1f(nsU, material->getNs());
 
-	/*
-	int mapKdU = glGetUniformLocation(coreShader.program, "mapKd");
-	glUniform1f(loc, material->getTid_Mapkd());
-	int mapKsU = glGetUniformLocation(coreShader.program, "mapKs");
+	/*int mapKsU = glGetUniformLocation(coreShader.program, "mapKs");
 	glUniform1f(loc, material->getTid_Mapks());*/
 }
