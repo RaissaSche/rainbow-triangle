@@ -7,6 +7,8 @@ in vec3 normal;
 out vec4 color;
 
 uniform sampler2D mapKd;
+uniform sampler2D mapKs;
+uniform int idMapKs;
 
 uniform int lightNum;
 uniform mat3 lightPos;
@@ -29,7 +31,7 @@ vec3 diffuse(vec3 lightPosV){
 	vec3 V = lightPosV - vec3(frag_pos.x, frag_pos.y, frag_pos.z);
 		
 	float Ad = max(0, dot(normal, normalize(V)));
-	vec3 d = ld * kd * Ad * texture(mapKd, TexCoord); 
+	vec3 d = ld * kd * Ad; 
 	
 	if(d.x < 0 || d.y < 0 || d.z < 0){
 		d = vec3(0, 0, 0);
@@ -46,7 +48,6 @@ vec3 specular(vec3 lightPosV){
 	float sAux = pow (As, ns);
 		
 	vec3 s = ls * ks * sAux;
-	//* mapKs;
 
 	if(s.x < 0 || s.y < 0 || s.z < 0){
 		s = vec3(0, 0, 0);
@@ -55,16 +56,28 @@ vec3 specular(vec3 lightPosV){
 	return s;
 }
 
+float fatt (vec3 VL){
+	float d = length(VL);
+	return 1 / (d * d);
+}
+
 void main(){
-	vec4 tex1 = texture (mapKd, TexCoord);
+	vec4 map_kd = texture (mapKd, TexCoord);
+	vec4 map_ks = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	if(idMapKs != 0){
+		//map_ks = texture (mapKs, TexCoord);
+	}
 	vec4 a = vec4(ambient(), 1); 
 	vec3 diff, spec;
 
 	for (int i = 0; i < lightNum; i++){
-		diff += diffuse(lightPos[i]);
-		spec += specular(lightPos[i]);
+		diff += fatt(diffuse(lightPos[i]));
+		spec += fatt(specular(lightPos[i]));
 	}
 
-	vec4 I = a + diff + spec;
-	color = I * tex1;
+	vec3 Id = diff * map_kd;
+	vec3 Is = spec * map_ks;
+	vec4 I = a * map_kd + Id + Is;
+	color = I;
+
 }

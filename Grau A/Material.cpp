@@ -77,3 +77,8 @@ void Material::setTid_Mapks(unsigned int tid_mapks)
 {
 	this->tid_mapks = tid_mapks;
 }
+
+unsigned int Material::getTid_Mapks()
+{
+	return tid_mapks;
+}

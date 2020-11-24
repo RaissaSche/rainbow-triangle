@@ -25,6 +25,7 @@ int System::GLFWInit()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	ConfigureScene* configureScene = new ConfigureScene();
+	configureScene->readAnimationFile("bspline.txt");
 	configureScene->readFile("config.txt");
 	width = configureScene->getWidth();
 	height = configureScene->getHeight();
@@ -256,6 +257,6 @@ void System::populateMtlValues(Material* material)
 	int nsU = glGetUniformLocation(coreShader.program, "ns");
 	glUniform1f(nsU, material->getNs());
 
-	/*int mapKsU = glGetUniformLocation(coreShader.program, "mapKs");
-	glUniform1f(loc, material->getTid_Mapks());*/
+	int idMapKsU = glGetUniformLocation(coreShader.program, "idMapKs");
+	glUniform1i(idMapKsU, material->getTid_Mapks());
 }

@@ -181,11 +181,13 @@ vector<Material*> ManageObj::readMtl(string fileName)
 			string map_kd;
 			sline >> map_kd;
 			material->setMap_Kd(map_kd);
+			material->setTid_Mapkd(1);
 		}
 		else if (temp == "map_Ks") {
 			string map_kd;
 			sline >> map_kd;
 			material->setMap_Ks(map_kd);
+			material->setTid_Mapks(2);
 		}
 	}
 	materials.push_back(material);

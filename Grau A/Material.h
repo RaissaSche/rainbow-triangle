@@ -15,8 +15,8 @@ private:
 	float ns;
 	string map_kd;
 	string map_ks;
-	unsigned int tid_mapkd;
-	unsigned int tid_mapks;
+	unsigned int tid_mapkd = 0;
+	unsigned int tid_mapks = 0;
 
 public:
 	void setId(string id);
@@ -35,4 +35,5 @@ public:
 	string getMap_Ks();
 	void setTid_Mapkd(unsigned int tid_mapkd);
 	void setTid_Mapks(unsigned int tid_mapks);
+	unsigned int getTid_Mapks();
 };
