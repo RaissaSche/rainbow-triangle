@@ -5,6 +5,7 @@ class ConfigureScene
 {
 private:
 	vector<Obj3D*> objs;
+	vector<float> animationPath;
 	glm::mat3 lights;
 	glm::vec3 cameraPos;
 	glm::vec3 cameraTarget;
@@ -13,6 +14,7 @@ private:
 	float la, ld, ls;
 public:
 	void readFile(string fileName);
+	void readAnimationFile(string fileName);
 	vector<Obj3D*> getObjs();
 	glm::mat3 getLights();
 	glm::vec3 getCameraPos();

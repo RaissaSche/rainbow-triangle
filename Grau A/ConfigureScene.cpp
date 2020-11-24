@@ -67,30 +67,18 @@ void ConfigureScene::readFile(string fileName)
 			sline >> temp;
 			lightNum = stoi(temp);
 
-			/*int rows = 3;
-			lights = new float* [2];
-			for (int i = 0; i < 2; ++i) {
-				lights[i] = new float[2];
-			}*/
-
-			//lights[2][0] = 13;
-			//lights[2][1] = 1;
-			//lights[2][2] = 3;
-
 			for (int i = 0; i < lightNum; i++) {
 
 				getline(arq, line);
 				stringstream slineAux;
 				slineAux << line;
 				string token;
-				//slineAux >> token;
 
 				//position
 				float x, y, z;
 				slineAux >> x >> y >> z;
 				float light[] = { x, y, z };
 
-				//lights.push_back(light);
 				lights[i][0] = light[0];
 				lights[i][1] = light[1];
 				lights[i][2] = light[2];
@@ -118,6 +106,27 @@ void ConfigureScene::readFile(string fileName)
 			width = stoi(token);
 			sline >> token;
 			height = stoi(token);
+		}
+	}
+}
+
+void ConfigureScene::readAnimationFile(string fileName)
+{
+	ifstream arq(fileName);
+	
+	while (!arq.eof()) {
+		string line;
+		getline(arq, line);
+		stringstream sline;
+		sline << line;
+		string temp;
+
+		sline >> temp;
+		int bSplineSize = stoi(temp);
+
+		for (int i = 0; i < bSplineSize; i++) {
+			sline >> temp;
+			animationPath.push_back(stof(temp));
 		}
 	}
 }
