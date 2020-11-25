@@ -1,5 +1,12 @@
 #include "Material.h"
 
+
+Material::Material()
+{
+	tid_mapkd = 0;
+	tid_mapks = 0;
+}
+
 void Material::setId(string id)
 {
 	this->id = id;

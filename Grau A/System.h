@@ -35,8 +35,10 @@ private:
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
 	glm::mat3 lightPos;
-	int lightNum;
+	glm::vec3 fog;
+	int lightNum, idFog;
 	float la, ld, ls;
+	vector<float> animationPath;
 
 public:
 	GLFWwindow* window;

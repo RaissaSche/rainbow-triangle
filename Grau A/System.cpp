@@ -25,7 +25,6 @@ int System::GLFWInit()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	ConfigureScene* configureScene = new ConfigureScene();
-	configureScene->readAnimationFile("bspline.txt");
 	configureScene->readFile("config.txt");
 	width = configureScene->getWidth();
 	height = configureScene->getHeight();
@@ -34,10 +33,13 @@ int System::GLFWInit()
 	cameraUp = configureScene->getCameraUp();
 	glm::mat3 lights = configureScene->getLights();
 	lightNum = configureScene->getLightNum();
+	fog = configureScene->getFog();
+	idFog = configureScene->getIdFog();
 	la = configureScene->getLa();
 	ld = configureScene->getLd();
 	ls = configureScene->getLs();
 	objs = configureScene->getObjs();
+	animationPath = configureScene->readAnimationFile();
 
 	window = glfwCreateWindow(width, height, "GA - Raissa Scheeren", nullptr, nullptr);
 
@@ -89,7 +91,6 @@ int System::SystemSetup()
 
 void System::Run()
 {
-
 	coreShader.Use();
 	char path[] = "textures/mesa01.bmp";
 	char textureUniformName[] = "mapKd";
@@ -229,10 +230,8 @@ void System::populateMtlValues(Material* material)
 	int lightPosU = glGetUniformLocation(coreShader.program, "lightPos");
 	glUniformMatrix4fv(lightPosU, 1, GL_FALSE, glm::value_ptr(lightPos));
 
-	/*
-	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPosLight");
-	glUniform3fv(loc, 1, GL_FALSE, glm::value_ptr(cameraPos));
-	*/
+	int cameraPosU = glGetUniformLocation(coreShader.program, "cameraPos");
+	glUniform3fv(cameraPosU, 1, glm::value_ptr(cameraPos));
 
 	int laU = glGetUniformLocation(coreShader.program, "la");
 	glUniform1f(laU, la);
@@ -259,4 +258,9 @@ void System::populateMtlValues(Material* material)
 
 	int idMapKsU = glGetUniformLocation(coreShader.program, "idMapKs");
 	glUniform1i(idMapKsU, material->getTid_Mapks());
+
+	int fogU = glGetUniformLocation(coreShader.program, "fog");
+	glUniform3fv(fogU, 1, glm::value_ptr(fog));
+	int idFogU = glGetUniformLocation(coreShader.program, "idFog");
+	glUniform1i(idFogU, idFog);
 }

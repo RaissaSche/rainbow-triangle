@@ -10,6 +10,8 @@ uniform sampler2D mapKd;
 uniform sampler2D mapKs;
 uniform int idMapKs;
 
+uniform vec3 cameraPos;
+
 uniform int lightNum;
 uniform mat3 lightPos;
 
@@ -22,6 +24,9 @@ uniform vec3 kd;
 uniform vec3 ks;
 
 uniform float ns;
+
+uniform int idFog;
+uniform vec3 fog;
 
 vec3 ambient(){
 	return la * ka;
@@ -61,11 +66,23 @@ float fatt (vec3 VL){
 	return 1 / (d * d);
 }
 
+	//aplicar fog depos do calc do fog percentual do fog peso 
+	//pela distancia do fragmento pelo da camera observador
+	//tipo fatt, mas troca os pontos e distância sobre 1
+	//depois de calcular percentual, chamar função mix ()
+	//passa rgb e rgb e VALOR DO MIX, função da opengl peso do 
+	//segindo árâmetro colr da iluna~çaõ e do fog e resultado da atuanação, 1/distância
+
+float fatm (){
+	float distance = distance(frag_pos, vec4(cameraPos, 1));
+	return 1 / distance;
+}
+
 void main(){
 	vec4 map_kd = texture (mapKd, TexCoord);
 	vec4 map_ks = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	if(idMapKs != 0){
-		//map_ks = texture (mapKs, TexCoord);
+		map_ks = texture (mapKs, TexCoord);
 	}
 	vec4 a = vec4(ambient(), 1); 
 	vec3 diff, spec;
@@ -78,6 +95,10 @@ void main(){
 	vec3 Id = diff * map_kd;
 	vec3 Is = spec * map_ks;
 	vec4 I = a * map_kd + Id + Is;
+
 	color = I;
 
+	if(idFog == 1){
+		color = mix(I, vec4(fog, 1), fatm());
+	}
 }

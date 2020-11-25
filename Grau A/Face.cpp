@@ -1,6 +1,10 @@
 #include "Face.h"
 
 
+Face::Face() {
+	numOfVertices = 0;
+}
+
 void Face::addInfo(int vp, int vt, int vn)
 {
 	verts.push_back(vp);

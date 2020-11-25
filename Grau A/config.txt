@@ -3,6 +3,8 @@ objs3D/mesa01.obj Table1 0 0 1 0.5 90 0
 objs3D/mesa01.obj Table2 10 10 10 0.5 90 1
 objs3D/sphere.obj Shot 0 0 2 0.1 0 0
 
+animFile bspline.txt
+
 camera 0 0 -4 0 0 0 0 1 0
 
 lightNum 2
@@ -10,3 +12,5 @@ lightNum 2
 20 20 20
 
 viewport 800 600
+
+fog true 0.9 0.9 0.9

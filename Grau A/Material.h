@@ -15,10 +15,11 @@ private:
 	float ns;
 	string map_kd;
 	string map_ks;
-	unsigned int tid_mapkd = 0;
-	unsigned int tid_mapks = 0;
+	unsigned int tid_mapkd;
+	unsigned int tid_mapks;
 
 public:
+	Material();
 	void setId(string id);
 	string getId();
 	void setKa(glm::vec3* ka);

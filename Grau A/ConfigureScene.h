@@ -10,19 +10,24 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraTarget;
 	glm::vec3 cameraUp;
-	int width, height, lightNum;
+	glm::vec3 fog;
+	int width, height, lightNum, idFog;
 	float la, ld, ls;
+	string animFile;
 public:
+	ConfigureScene();
 	void readFile(string fileName);
-	void readAnimationFile(string fileName);
+	vector<float> readAnimationFile();
 	vector<Obj3D*> getObjs();
 	glm::mat3 getLights();
 	glm::vec3 getCameraPos();
 	glm::vec3 getCameraTarget();
 	glm::vec3 getCameraUp();
+	glm::vec3 getFog();
 	int getWidth();
 	int getHeight();
 	int getLightNum();
+	int getIdFog();
 	void setLa(float la);
 	float getLa();
 	void setLd(float ld);

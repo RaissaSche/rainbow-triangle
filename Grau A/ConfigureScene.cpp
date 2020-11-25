@@ -3,11 +3,16 @@
 #include <fstream>
 #include <sstream>
 
+
+ConfigureScene::ConfigureScene() {
+	idFog = 0;
+}
+
 void ConfigureScene::readFile(string fileName)
 {
 	ifstream arq(fileName);
 	int objsNum;
-	
+
 	while (!arq.eof()) {
 		string line;
 		getline(arq, line);
@@ -107,13 +112,30 @@ void ConfigureScene::readFile(string fileName)
 			sline >> token;
 			height = stoi(token);
 		}
+		else if (temp == "fog") {
+			string token;
+			sline >> token;
+			if (token == "true") {
+				idFog = 1;
+				for (int i = 0; i < 3; i++) {
+					float x, y, z;
+					sline >> x >> y >> z;
+					fog = glm::vec3(x, y, z);
+				}
+			}
+		}
+		else if (temp == "animFile") {
+			string token;
+			sline >> token;
+			animFile = token;
+		}
 	}
 }
 
-void ConfigureScene::readAnimationFile(string fileName)
+vector<float> ConfigureScene::readAnimationFile()
 {
-	ifstream arq(fileName);
-	
+	ifstream arq(animFile);
+
 	while (!arq.eof()) {
 		string line;
 		getline(arq, line);
@@ -129,6 +151,7 @@ void ConfigureScene::readAnimationFile(string fileName)
 			animationPath.push_back(stof(temp));
 		}
 	}
+	return animationPath;
 }
 
 vector<Obj3D*> ConfigureScene::getObjs()
@@ -156,6 +179,11 @@ glm::vec3 ConfigureScene::getCameraUp()
 	return cameraUp;
 }
 
+glm::vec3 ConfigureScene::getFog()
+{
+	return fog;
+}
+
 int ConfigureScene::getWidth()
 {
 	return width;
@@ -169,6 +197,11 @@ int ConfigureScene::getHeight()
 int ConfigureScene::getLightNum()
 {
 	return lightNum;
+}
+
+int ConfigureScene::getIdFog()
+{
+	return idFog;
 }
 
 void ConfigureScene::setLa(float la)
